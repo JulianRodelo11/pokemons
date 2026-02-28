@@ -1,0 +1,18 @@
+{
+  "@@locale": "es",
+  "appTitle": "Pokémon Favoritos",
+  "splashTitle": "Pokémon Favoritos",
+  "onboardingBack": "Atrás",
+  "onboardingNext": "Siguiente",
+  "onboardingStart": "Empezar",
+  "onboardingWelcomeTitle": "Bienvenido",
+  "onboardingWelcomeSubtitle": "Explora la lista de Pokémon y descubre tus favoritos.",
+  "onboardingFavoritesTitle": "Guarda favoritos",
+  "onboardingFavoritesSubtitle": "Marca los Pokémon que más te gusten y accede a ellos cuando quieras.",
+  "homeTitle": "Pokémon",
+  "homeEmptyList": "No hay Pokémon",
+  "homeError": "Error: {error}",
+  "detailHeightWeight": "Altura: {height} dm · Peso: {weight} hg",
+  "detailStats": "Estadísticas",
+  "detailError": "Error: {error}"
+}
