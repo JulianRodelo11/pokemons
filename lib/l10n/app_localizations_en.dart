@@ -18,20 +18,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboardingBack => 'Back';
 
   @override
-  String get onboardingNext => 'Next';
+  String get onboardingContinue => 'Continue';
 
   @override
-  String get onboardingStart => 'Get started';
+  String get onboardingStart => 'Let\'s start';
 
   @override
-  String get onboardingWelcomeTitle => 'Welcome';
+  String get onboardingWelcomeTitle => 'All Pokémon in one place';
 
   @override
   String get onboardingWelcomeSubtitle =>
-      'Explore the Pokémon list and discover your favorites.';
+      'Access a wide list of Pokémon from all generations created by Nintendo';
 
   @override
-  String get onboardingFavoritesTitle => 'Save favorites';
+  String get onboardingFavoritesTitle =>
+      'Register and save your profile, favorite Pokémon, settings, and much more in the app.';
 
   @override
   String get onboardingFavoritesSubtitle =>

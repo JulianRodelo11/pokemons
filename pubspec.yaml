@@ -19,6 +19,7 @@ dependencies:
   freezed_annotation: ^3.1.0
   json_annotation: ^4.9.0
   flutter_svg: ^2.0.16
+  google_fonts: ^8.0.2
 
 dev_dependencies:
   flutter_test:
@@ -42,7 +43,6 @@ flutter:
   generate: true
   assets:
     - assets/svg/
-    - assets/images/
-    - assets/images/1.0x/
-    - assets/images/2.0x/
-    - assets/images/3.0x/
+    # Imágenes base (Flutter carga automáticamente 2.0x y 3.0x)
+    - assets/images/Omboarding_01.png
+    - assets/images/Omboarding_02.png

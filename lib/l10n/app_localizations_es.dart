@@ -18,24 +18,24 @@ class AppLocalizationsEs extends AppLocalizations {
   String get onboardingBack => 'Atrás';
 
   @override
-  String get onboardingNext => 'Siguiente';
+  String get onboardingContinue => 'Continuar';
 
   @override
-  String get onboardingStart => 'Empezar';
+  String get onboardingStart => 'Empecemos';
 
   @override
-  String get onboardingWelcomeTitle => 'Bienvenido';
+  String get onboardingWelcomeTitle => 'Todos los Pokémon en un solo lugar';
 
   @override
   String get onboardingWelcomeSubtitle =>
-      'Explora la lista de Pokémon y descubre tus favoritos.';
+      'Accede a una amplia lista de Pokémon de todas las generaciones creadas por Nintendo';
 
   @override
-  String get onboardingFavoritesTitle => 'Guarda favoritos';
+  String get onboardingFavoritesTitle => 'Mantén tu Pokédex actualizada';
 
   @override
   String get onboardingFavoritesSubtitle =>
-      'Marca los Pokémon que más te gusten y accede a ellos cuando quieras.';
+      'Regístrate y guarda tu perfil, Pokémon favoritos, configuraciones y mucho más en la aplicación';
 
   @override
   String get homeTitle => 'Pokémon';

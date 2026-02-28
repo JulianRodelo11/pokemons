@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:pokemons/core/routes/app_routes.dart';
-import 'package:pokemons/presentation/screens/home_screen.dart';
-import 'package:pokemons/presentation/screens/onboarding_screen.dart';
-import 'package:pokemons/presentation/screens/pokemon_detail_screen.dart';
-import 'package:pokemons/presentation/screens/splash_screen.dart';
+import 'package:pokemons/presentation/screens/home/home_screen.dart';
+import 'package:pokemons/presentation/screens/onboarding/onboarding_screen.dart';
+import 'package:pokemons/presentation/screens/pokemon_detail/pokemon_detail_screen.dart';
+import 'package:pokemons/presentation/screens/splash/splash_screen.dart';
 
 /// Genera la ruta correspondiente a [settings].
 /// Concentra aquí toda la lógica de rutas y argumentos.

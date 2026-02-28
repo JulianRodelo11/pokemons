@@ -11,9 +11,7 @@ void main() {
   final navigatorKey = GlobalKey<NavigatorState>();
   runApp(
     ProviderScope(
-      overrides: [
-        navigatorKeyProvider.overrideWithValue(navigatorKey),
-      ],
+      overrides: [navigatorKeyProvider.overrideWithValue(navigatorKey)],
       child: MainApp(navigatorKey: navigatorKey),
     ),
   );
@@ -32,7 +30,6 @@ class MainApp extends StatelessWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       theme: AppTheme.light,
-      darkTheme: AppTheme.dark,
       initialRoute: AppRoutes.splash,
       onGenerateRoute: generateRoute,
     );

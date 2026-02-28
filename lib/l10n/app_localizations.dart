@@ -116,34 +116,34 @@ abstract class AppLocalizations {
   /// **'Back'**
   String get onboardingBack;
 
-  /// No description provided for @onboardingNext.
+  /// No description provided for @onboardingContinue.
   ///
   /// In en, this message translates to:
-  /// **'Next'**
-  String get onboardingNext;
+  /// **'Continue'**
+  String get onboardingContinue;
 
   /// No description provided for @onboardingStart.
   ///
   /// In en, this message translates to:
-  /// **'Get started'**
+  /// **'Let\'s start'**
   String get onboardingStart;
 
   /// No description provided for @onboardingWelcomeTitle.
   ///
   /// In en, this message translates to:
-  /// **'Welcome'**
+  /// **'All Pokémon in one place'**
   String get onboardingWelcomeTitle;
 
   /// No description provided for @onboardingWelcomeSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Explore the Pokémon list and discover your favorites.'**
+  /// **'Access a wide list of Pokémon from all generations created by Nintendo'**
   String get onboardingWelcomeSubtitle;
 
   /// No description provided for @onboardingFavoritesTitle.
   ///
   /// In en, this message translates to:
-  /// **'Save favorites'**
+  /// **'Register and save your profile, favorite Pokémon, settings, and much more in the app.'**
   String get onboardingFavoritesTitle;
 
   /// No description provided for @onboardingFavoritesSubtitle.

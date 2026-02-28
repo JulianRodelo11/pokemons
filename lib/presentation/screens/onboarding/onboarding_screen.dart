@@ -4,6 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pokemons/core/constants/assets_paths.dart';
 import 'package:pokemons/core/navigation/navigation_providers.dart';
 import 'package:pokemons/core/routes/app_routes.dart';
+import 'package:pokemons/core/theme/app_colors.dart';
+import 'package:pokemons/core/theme/app_typography.dart';
+import 'package:pokemons/core/widgets/sweep_button.dart';
 import 'package:pokemons/l10n/app_localizations.dart';
 
 /// Onboarding: una pantalla con dos ventanas (pasos). Al terminar va a Home.
@@ -49,61 +52,50 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             Expanded(
               child: PageView(
                 controller: _pageController,
-                physics: const NeverScrollableScrollPhysics(),
                 onPageChanged: (int index) =>
                     setState(() => _currentPage = index),
                 children: [_OnboardingPage1(), _OnboardingPage2()],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(24),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  if (_currentPage > 0)
-                    TextButton(
-                      onPressed: () {
-                        _pageController.previousPage(
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeInOut,
-                        );
-                        setState(() => _currentPage--);
-                      },
-                      child: Text(AppLocalizations.of(context)!.onboardingBack),
-                    )
-                  else
-                    const SizedBox.shrink(),
-                  FilledButton(
-                    onPressed: _next,
-                    child: Text(
-                      _currentPage < _totalPages - 1
-                          ? AppLocalizations.of(context)!.onboardingNext
-                          : AppLocalizations.of(context)!.onboardingStart,
-                    ),
-                  ),
-                ],
               ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
                 _totalPages,
-                (int index) => Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 4),
-                  width: 8,
-                  height: 8,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: _currentPage == index
-                        ? Theme.of(context).colorScheme.primary
-                        : Theme.of(
-                            context,
-                          ).colorScheme.outline.withValues(alpha: 0.3),
+                (int index) {
+                  final isActive = _currentPage == index;
+                  return Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 4),
+                    width: isActive ? 24 : 8,
+                    height: 8,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4),
+                      color: isActive
+                          ? AppColors.pageIndicator
+                          : Theme.of(context)
+                              .colorScheme
+                              .outline
+                              .withValues(alpha: 0.3),
+                    ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 24),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+              child: SizedBox(
+                width: double.infinity,
+                height: 58,
+                child: SweepButton(
+                  onPressed: _next,
+                  child: Text(
+                    _currentPage < _totalPages - 1
+                        ? AppLocalizations.of(context)!.onboardingContinue
+                        : AppLocalizations.of(context)!.onboardingStart,
                   ),
                 ),
               ),
             ),
-            const SizedBox(height: 16),
           ],
         ),
       ),
@@ -116,6 +108,7 @@ class _OnboardingPage1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double availableWidth_01 = MediaQuery.sizeOf(context).width - 64;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 32),
       child: Column(
@@ -123,27 +116,28 @@ class _OnboardingPage1 extends StatelessWidget {
         children: [
           Image.asset(
             AssetsPaths.imageOnboarding01,
-            width: 280,
-            height: 280,
+            width: availableWidth_01,
             fit: BoxFit.contain,
-            errorBuilder: (_, Object error, StackTrace? stackTrace) => Icon(
-              Icons.image_not_supported_outlined,
-              size: 120,
-              color: Theme.of(context).colorScheme.outline,
-            ),
+            filterQuality: FilterQuality.high,
+            errorBuilder:
+                (BuildContext _, Object error, StackTrace? stackTrace) => Icon(
+                  Icons.image_not_supported_outlined,
+                  size: 120,
+                  color: Theme.of(context).colorScheme.outline,
+                ),
           ),
           const SizedBox(height: 32),
           Text(
             AppLocalizations.of(context)!.onboardingWelcomeTitle,
-            style: Theme.of(
-              context,
-            ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
+            style: AppTypography.headingMedium.copyWith(
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
           Text(
             AppLocalizations.of(context)!.onboardingWelcomeSubtitle,
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            style: AppTypography.bodyMedium.copyWith(
               color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
             textAlign: TextAlign.center,
@@ -159,6 +153,7 @@ class _OnboardingPage2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double availableWidth_02 = MediaQuery.sizeOf(context).width - 150;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 32),
       child: Column(
@@ -166,27 +161,28 @@ class _OnboardingPage2 extends StatelessWidget {
         children: [
           Image.asset(
             AssetsPaths.imageOnboarding02,
-            width: 280,
-            height: 280,
+            width: availableWidth_02,
             fit: BoxFit.contain,
-            errorBuilder: (_, Object error, StackTrace? stackTrace) => Icon(
-              Icons.image_not_supported_outlined,
-              size: 120,
-              color: Theme.of(context).colorScheme.outline,
-            ),
+            filterQuality: FilterQuality.high,
+            errorBuilder:
+                (BuildContext _, Object error, StackTrace? stackTrace) => Icon(
+                  Icons.image_not_supported_outlined,
+                  size: 120,
+                  color: Theme.of(context).colorScheme.outline,
+                ),
           ),
           const SizedBox(height: 32),
           Text(
             AppLocalizations.of(context)!.onboardingFavoritesTitle,
-            style: Theme.of(
-              context,
-            ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
+            style: AppTypography.headingMedium.copyWith(
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
           Text(
             AppLocalizations.of(context)!.onboardingFavoritesSubtitle,
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            style: AppTypography.bodyMedium.copyWith(
               color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
             textAlign: TextAlign.center,
