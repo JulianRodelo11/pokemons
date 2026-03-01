@@ -1,4 +1,4 @@
-# Pokémon Pokédex - Prueba Técnica
+# Pokémon Pokédex
 
 Esta aplicación es una Pokédex moderna desarrollada con Flutter, diseñada para ofrecer una experiencia fluida y robusta. El proyecto cumple con los más altos estándares de calidad de software, aplicando Clean Architecture, principios SOLID y las mejores prácticas del ecosistema Flutter.
 
