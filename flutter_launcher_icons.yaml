@@ -1,9 +1,16 @@
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/images/2.0x/Icon.png"
+  # Usamos la imagen con margen para TODO por defecto
+  image_path: "assets/images/ios_final_icon.png"
   background_color: "#FFFFFF"
+  
+  # Android adaptive
   adaptive_icon_background: "#FFFFFF"
   adaptive_icon_foreground: "assets/images/2.0x/Icon.png"
+  
+  # iOS: Forzamos la imagen con margen en todos los tamaños
+  image_path_ios: "assets/images/ios_final_icon.png"
   remove_alpha_ios: true
+  
   min_sdk_android: 21
