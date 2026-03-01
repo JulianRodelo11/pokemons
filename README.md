@@ -1,4 +1,4 @@
-# Pokémon Pokédex - Prueba Técnica Global66
+# Pokémon Pokédex - Prueba Técnica
 
 Esta aplicación es una Pokédex moderna desarrollada con Flutter, diseñada para ofrecer una experiencia fluida y robusta. El proyecto cumple con los más altos estándares de calidad de software, aplicando Clean Architecture, principios SOLID y las mejores prácticas del ecosistema Flutter.
 
@@ -65,7 +65,7 @@ Para correr esta aplicación localmente, asegúrate de tener instalado Flutter (
 
 ## 🛠️ Stack Tecnológico
 
-El proyecto utiliza las herramientas recomendadas por Global66 para garantizar escalabilidad y mantenibilidad:
+El proyecto utiliza las herramientas recomendadas para garantizar escalabilidad y mantenibilidad:
 
 *   **Gestión de Estado:** `Riverpod` con anotaciones (`riverpod_generator`) para un estado reactivo, seguro y fácil de testear.
 *   **Modelos de Datos:** `Freezed` para garantizar la inmutabilidad de los datos y facilitar el uso del patrón `copyWith`.
