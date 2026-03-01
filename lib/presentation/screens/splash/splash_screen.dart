@@ -21,11 +21,9 @@ class SplashScreen extends ConsumerStatefulWidget {
 
 class _SplashScreenState extends ConsumerState<SplashScreen>
     with SingleTickerProviderStateMixin {
-  static const _minSplashDuration = Duration(milliseconds: 1500);
-  static const _shortSplashDuration = Duration(milliseconds: 400);
-
-  Duration get _splashDuration =>
-      AppConstants.forcePokemonListError ? _shortSplashDuration : _minSplashDuration;
+  Duration get _splashDuration => AppConstants.forcePokemonListError
+      ? AppConstants.splashFadeDuration
+      : AppConstants.splashDuration;
 
   bool _started = false;
   DateTime? _splashStart;
@@ -36,11 +34,14 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   void initState() {
     super.initState();
     _splashStart = DateTime.now();
-    _ticker = createTicker((elapsed) {
+    _ticker = createTicker((Duration elapsed) {
       if (_splashStart == null || !mounted) return;
       final int ms = DateTime.now().difference(_splashStart!).inMilliseconds;
       // Una rotación completa durante el tiempo que dura la pantalla
-      final progress = (ms / _splashDuration.inMilliseconds).clamp(0.0, 1.0);
+      final double progress = (ms / _splashDuration.inMilliseconds).clamp(
+        0.0,
+        1.0,
+      );
       setState(
         () => _rotationValue = Curves.easeInOutCubic.transform(progress),
       );
@@ -64,7 +65,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
         .navigate<void>(
           const OnboardingScreen(),
           animationType: AnimationType.fade,
-          duration: const Duration(milliseconds: 400),
+          duration: AppConstants.splashFadeDuration,
         );
   }
 

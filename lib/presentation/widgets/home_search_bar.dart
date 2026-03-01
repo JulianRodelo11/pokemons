@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:pokemons/core/theme/app_typography.dart';
 import 'package:pokemons/core/theme/theme.dart';
 
 /// Barra de búsqueda: input tipo pill y botón circular, fondo blanco y borde gris claro.
@@ -16,8 +15,6 @@ class HomeSearchBar extends StatelessWidget {
   final String hint;
   final VoidCallback? onSearchButtonTap;
 
-  static const Color _borderColor = Color(0xFFE0E0E0);
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -31,7 +28,7 @@ class HomeSearchBar extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(50),
-                border: Border.all(color: _borderColor, width: 1),
+                border: Border.all(color: AppColors.border, width: 1),
               ),
               child: Stack(
                 alignment: Alignment.centerLeft,
@@ -80,7 +77,7 @@ class HomeSearchBar extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     shape: BoxShape.circle,
-                    border: Border.all(color: _borderColor, width: 1),
+                    border: Border.all(color: AppColors.border, width: 1),
                   ),
                   alignment: Alignment.center,
                   child: Icon(

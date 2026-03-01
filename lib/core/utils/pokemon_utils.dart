@@ -110,4 +110,22 @@ abstract class PokemonUtils {
     }
     return set.toList()..sort();
   }
+
+  /// Lista de habilidades traducidas según el locale, con fallback.
+  static List<String> abilitiesForLocale(
+    Map<String, List<String>> abilityNamesByLocale,
+    List<String> defaultAbilities,
+    String locale,
+  ) {
+    if (abilityNamesByLocale.isEmpty) return defaultAbilities;
+    return abilityNamesByLocale[locale] ??
+        abilityNamesByLocale['en'] ??
+        defaultAbilities;
+  }
+
+  /// Formatea valores decimales (peso/altura) con coma.
+  static String formatMeasurement(num value) {
+    final double converted = value / 10.0;
+    return converted.toStringAsFixed(1).replaceAll('.', ',');
+  }
 }

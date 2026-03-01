@@ -32,11 +32,13 @@ class _SweepButtonState extends State<SweepButton> {
     final onPressed = widget.onPressed;
     if (onPressed == null) return;
 
-    final tapDownTime = _tapDownTime;
+    final DateTime? tapDownTime = _tapDownTime;
     if (tapDownTime != null) {
       final elapsed = DateTime.now().difference(tapDownTime).inMilliseconds;
-      final remaining =
-          (sweepSplashDurationMs - elapsed).clamp(0, sweepSplashDurationMs);
+      final int remaining = (sweepSplashDurationMs - elapsed).clamp(
+        0,
+        sweepSplashDurationMs,
+      );
       if (remaining > 0) {
         Future<void>.delayed(Duration(milliseconds: remaining), onPressed);
       } else {
@@ -53,8 +55,8 @@ class _SweepButtonState extends State<SweepButton> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
 
     return Material(
       color: colorScheme.primary,
@@ -64,9 +66,13 @@ class _SweepButtonState extends State<SweepButton> {
         onTapDown: widget.onPressed != null ? _onTapDown : null,
         onTapCancel: _onTapCancel,
         splashFactory: widget.splashFactory,
+        splashColor: Colors.white,
         overlayColor: WidgetStateProperty.all(
-          Color.lerp(colorScheme.primary, Colors.white, 0.2)!
-              .withValues(alpha: 0.35),
+          Color.lerp(
+            colorScheme.primary,
+            Colors.white,
+            0.2,
+          )!.withValues(alpha: 0.35),
         ),
         borderRadius: BorderRadius.circular(20),
         child: Ink(

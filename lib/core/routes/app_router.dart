@@ -25,8 +25,16 @@ Route<dynamic>? generateRoute(RouteSettings settings) {
         settings: settings,
         builder: (_) => const HomeScreen(),
       );
-    case AppRoutes.detail:
-      final name = settings.arguments as String?;
+    case AppRoutes.detail: {
+      final args = settings.arguments;
+      final String? name = args is Map
+          ? args['name'] as String?
+          : args is String
+              ? args
+              : null;
+      final int heroTagSuffix = args is Map && args['heroTagSuffix'] != null
+          ? args['heroTagSuffix'] as int
+          : 0;
       if (name == null || name.isEmpty) {
         return MaterialPageRoute<void>(
           settings: const RouteSettings(name: AppRoutes.home),
@@ -35,8 +43,12 @@ Route<dynamic>? generateRoute(RouteSettings settings) {
       }
       return MaterialPageRoute<void>(
         settings: settings,
-        builder: (_) => PokemonDetailScreen(name: name),
+        builder: (_) => PokemonDetailScreen(
+          name: name,
+          heroTagSuffix: heroTagSuffix,
+        ),
       );
+    }
     default:
       return MaterialPageRoute<void>(
         settings: settings,

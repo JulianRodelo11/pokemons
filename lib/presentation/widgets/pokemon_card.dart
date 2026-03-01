@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:pokemons/core/theme/app_typography.dart';
+import 'package:pokemons/core/constants/app_constants.dart';
+import 'package:pokemons/core/theme/theme.dart';
 import 'package:pokemons/core/theme/pokemon_type_colors.dart';
 import 'package:pokemons/core/utils/pokemon_utils.dart';
 import 'package:pokemons/core/utils/string_utils.dart';
@@ -10,6 +11,7 @@ import 'package:pokemons/domain/entities/pokemon_detail.dart';
 import 'package:pokemons/presentation/providers/favorites_provider.dart';
 import 'package:pokemons/presentation/providers/pokemon_detail_provider.dart';
 import 'package:pokemons/presentation/providers/pokemon_list_provider.dart';
+import 'package:pokemons/presentation/widgets/pokemon_background_svg.dart';
 import 'package:pokemons/presentation/widgets/pokemon_type_chip.dart';
 
 /// Carta de Pokémon en la lista (número, nombre, tipos, imagen, favorito).
@@ -82,7 +84,7 @@ class PokemonCard extends ConsumerWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(16),
         child: Container(
-          height: 102,
+          height: AppConstants.pokemonCardHeight,
           decoration: BoxDecoration(
             color: cardColor.withValues(alpha: 0.5),
             borderRadius: BorderRadius.circular(16),
@@ -141,7 +143,7 @@ class PokemonCard extends ConsumerWidget {
                         children: <Widget>[
                           Positioned.fill(
                             child: Hero(
-                              tag: 'pokemon-card-bg-${pokemon.name}',
+                              tag: 'pokemon-card-bg-${pokemon.name}-$listIndex',
                               child: Container(
                                 decoration: BoxDecoration(
                                   color: cardColor,
@@ -165,10 +167,12 @@ class PokemonCard extends ConsumerWidget {
                                     types,
                                     cardColor,
                                     pokemon.name,
+                                    listIndex,
                                   ),
                                 ),
                                 Hero(
-                                  tag: 'pokemon-image-${pokemon.name}',
+                                  tag:
+                                      'pokemon-image-${pokemon.name}-$listIndex',
                                   child: Image.network(
                                     imageUrl,
                                     height: 88,
@@ -200,8 +204,11 @@ class PokemonCard extends ConsumerWidget {
                   top: 0,
                   right: 0,
                   child: IconButton(
+                    style: IconButton.styleFrom(
+                      splashFactory: NoSplash.splashFactory,
+                    ),
                     icon: Hero(
-                      tag: 'pokemon-favorite-${pokemon.name}',
+                      tag: 'pokemon-favorite-${pokemon.name}-$listIndex',
                       child: _FavoriteHeartIcon(isFavorite: isFavorite),
                     ),
                     onPressed: () => ref
@@ -217,33 +224,23 @@ class PokemonCard extends ConsumerWidget {
     );
   }
 
-  /// Fondo detrás de la imagen: padding, medidas 94×91.37, SVG/círculo con degradé aplicado a la forma.
-  /// El degradé (blanco → blanco 0%) se aplica al SVG con [ShaderMask] para que se vea en la forma.
+  /// Fondo detrás de la imagen: padding, medidas 94×91.37, SVG/círculo con degradé.
+  /// Usa [PokemonBackgroundSvg] como hijo del Hero para que la animación muestre
+  /// el mismo contenido (gradiente + SVG) en carta y detalle.
   Widget _buildImageBackground(
     List<String> types,
     Color cardColor,
     String pokemonName,
+    int listIndex,
   ) {
     const double contentWidth = 94;
     const double contentHeight = 91.37;
     const EdgeInsets padding = EdgeInsets.all(6);
 
-    const LinearGradient shapeGradient = LinearGradient(
-      begin: Alignment.topCenter,
-      end: Alignment.bottomCenter,
-      colors: <Color>[
-        Color(0xFFFFFFFF),
-        Color(
-          0x26FFFFFF,
-        ), // ~15% opacidad para que la parte inferior siga visible
-      ],
-    );
-
     final path = types.isNotEmpty
         ? PokemonUtils.backgroundSvgPath(types.first)
         : null;
 
-    // Resolución 2× para que el Hero no se pixele al escalar en la animación
     const double heroScale = 2.0;
     final double heroW = contentWidth * heroScale;
     final double heroH = contentHeight * heroScale;
@@ -259,11 +256,11 @@ class PokemonCard extends ConsumerWidget {
             scale: 1 / heroScale,
             alignment: Alignment.center,
             child: Hero(
-              tag: 'pokemon-bg-svg-$pokemonName',
-              child: SizedBox(
+              tag: 'pokemon-bg-svg-$pokemonName-$listIndex',
+              child: PokemonBackgroundSvg(
+                svgPath: path,
                 width: heroW,
                 height: heroH,
-                child: SvgPicture.asset(path, fit: BoxFit.contain),
               ),
             ),
           ),
@@ -271,7 +268,10 @@ class PokemonCard extends ConsumerWidget {
       );
     } else {
       shape = DecoratedBox(
-        decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          shape: BoxShape.circle,
+        ),
         child: const SizedBox.expand(),
       );
     }
@@ -281,11 +281,7 @@ class PokemonCard extends ConsumerWidget {
       child: SizedBox(
         width: contentWidth,
         height: contentHeight,
-        child: ShaderMask(
-          blendMode: BlendMode.srcIn,
-          shaderCallback: (Rect bounds) => shapeGradient.createShader(bounds),
-          child: shape,
-        ),
+        child: shape,
       ),
     );
   }
@@ -355,7 +351,6 @@ class PokemonCard extends ConsumerWidget {
     WidgetRef ref,
     bool isFavorite,
   ) {
-    const fallbackColor = Color(0xFF9DA0AA);
     final imageUrl = PokemonUtils.officialArtworkUrl(pokemon.id);
 
     return Material(
@@ -366,10 +361,10 @@ class PokemonCard extends ConsumerWidget {
         child: Container(
           height: 102,
           decoration: BoxDecoration(
-            color: fallbackColor.withValues(alpha: 0.5),
+            color: AppColors.cardFallback.withValues(alpha: 0.5),
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: fallbackColor.withValues(alpha: 0.5),
+              color: AppColors.cardFallback.withValues(alpha: 0.5),
               width: 1,
             ),
           ),
@@ -402,7 +397,7 @@ class PokemonCard extends ConsumerWidget {
                       width: 100,
                       height: 100,
                       child: Hero(
-                        tag: 'pokemon-image-${pokemon.name}',
+                        tag: 'pokemon-image-${pokemon.name}-$listIndex',
                         child: Image.network(
                           imageUrl,
                           height: 88,
@@ -423,8 +418,11 @@ class PokemonCard extends ConsumerWidget {
                 top: 12,
                 right: 12,
                 child: IconButton(
+                  style: IconButton.styleFrom(
+                    splashFactory: NoSplash.splashFactory,
+                  ),
                   icon: Hero(
-                    tag: 'pokemon-favorite-${pokemon.name}',
+                    tag: 'pokemon-favorite-${pokemon.name}-$listIndex',
                     child: _FavoriteHeartIcon(isFavorite: isFavorite),
                   ),
                   onPressed: () =>
@@ -458,7 +456,7 @@ class _FavoriteHeartIcon extends StatelessWidget {
       height: _size * 2,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        border: Border.all(color: Colors.white, width: _borderWidth),
+        border: Border.all(color: AppColors.white, width: _borderWidth),
         color: Colors.black.withValues(alpha: 0.3),
       ),
       alignment: Alignment.center,
@@ -469,7 +467,7 @@ class _FavoriteHeartIcon extends StatelessWidget {
           path,
           width: _size,
           height: _size,
-          colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
+          colorFilter: const ColorFilter.mode(AppColors.white, BlendMode.srcIn),
         ),
       ),
     );

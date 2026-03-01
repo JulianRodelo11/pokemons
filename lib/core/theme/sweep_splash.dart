@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// Duración del barrido del splash (ms). Usar para sincronizar callbacks.
-const int sweepSplashDurationMs = 350;
+const int sweepSplashDurationMs = 450;
 
 /// Splash que barre de derecha a izquierda al pulsar.
 class SweepSplash extends InteractiveInkFeature {
@@ -121,18 +121,19 @@ class SweepSplash extends InteractiveInkFeature {
       bottomRight: effectiveRadius.bottomRight,
     );
 
-    // Gradiente suave en el borde izquierdo del sweep para transición más natural.
-    final Color sweepColor = _color.withValues(alpha: _color.a * alpha);
+    // Barrido muy visible: color sólido con borde izquierdo suave.
+    final Color sweepColor = _color.withValues(alpha: (_color.a * alpha).clamp(0.0, 1.0));
+    final Color solidColor = sweepColor.withValues(alpha: 1.0);
     final Paint paint = Paint()
       ..shader = LinearGradient(
         begin: Alignment.centerLeft,
         end: Alignment.centerRight,
         colors: [
           sweepColor.withValues(alpha: 0),
-          sweepColor.withValues(alpha: sweepColor.a * 0.4),
-          sweepColor,
+          solidColor,
+          solidColor,
         ],
-        stops: const [0.0, 0.35, 1.0],
+        stops: const [0.0, 0.15, 1.0],
       ).createShader(sweepRect);
 
     canvas.save();

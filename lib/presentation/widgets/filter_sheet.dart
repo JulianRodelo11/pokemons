@@ -1,21 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:pokemons/core/theme/app_typography.dart';
+import 'package:pokemons/core/theme/theme.dart';
 import 'package:pokemons/core/utils/pokemon_utils.dart';
 import 'package:pokemons/l10n/app_localizations.dart';
 
 /// Altura fija del bottom sheet de filtros.
 const double _kFilterSheetHeight = 614;
-
-/// Colores del sheet de filtros (fiel al diseño).
-class _FilterSheetColors {
-  static const Color sheetBackground = Colors.white;
-  static const Color checkboxChecked = Color(0xFF1E88E5);
-  static const Color titleAndLabel = Color(0xFF212121);
-  static const Color listItem = Color(0xFF212121);
-  static const Color cancelButtonBackground = Color(0xFFEEEEEE);
-  static const Color cancelButtonText = Color(0xFF212121);
-  static const Color divider = Color(0xFFE0E0E0);
-}
 
 /// Nombres para mostrar en el filtro (con acentos cuando aplica).
 const Map<String, String> _typeFilterDisplayNames = <String, String>{
@@ -90,13 +79,12 @@ class _FilterSheetState extends State<FilterSheet> {
     return Container(
       height: _kFilterSheetHeight,
       decoration: const BoxDecoration(
-        color: _FilterSheetColors.sheetBackground,
+        color: AppColors.surface,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
-          // const SizedBox(height: 12),
           Padding(
             padding: const EdgeInsets.fromLTRB(8, 10, 8, 0),
             child: Row(
@@ -105,7 +93,7 @@ class _FilterSheetState extends State<FilterSheet> {
                   icon: const Icon(Icons.close),
                   onPressed: () => Navigator.of(context).pop(),
                   style: IconButton.styleFrom(
-                    foregroundColor: _FilterSheetColors.titleAndLabel,
+                    foregroundColor: AppColors.onSurface,
                   ),
                 ),
               ],
@@ -115,10 +103,10 @@ class _FilterSheetState extends State<FilterSheet> {
             l10n.filterSheetTitle,
             textAlign: TextAlign.center,
             style: AppTypography.heading2xl.copyWith(
-              color: _FilterSheetColors.titleAndLabel,
+              color: AppColors.onSurface,
             ),
           ),
-          SizedBox(height: 24),
+          const SizedBox(height: 24),
           _buildSectionHeader(
             l10n.filterSheetTypeLabel,
             isExpanded: _isTypeSectionExpanded,
@@ -142,12 +130,12 @@ class _FilterSheetState extends State<FilterSheet> {
                 : const SizedBox.shrink(),
           ),
           Container(
-            decoration: BoxDecoration(
-              color: _FilterSheetColors.sheetBackground,
+            decoration: const BoxDecoration(
+              color: AppColors.surface,
               boxShadow: <BoxShadow>[
                 BoxShadow(
-                  color: const Color(0x1F000000),
-                  offset: const Offset(0, -1),
+                  color: AppColors.shadow,
+                  offset: Offset(0, -1),
                   blurRadius: 3,
                   spreadRadius: 0,
                 ),
@@ -170,9 +158,8 @@ class _FilterSheetState extends State<FilterSheet> {
                     child: OutlinedButton(
                       onPressed: () => Navigator.of(context).pop(),
                       style: OutlinedButton.styleFrom(
-                        backgroundColor:
-                            _FilterSheetColors.cancelButtonBackground,
-                        foregroundColor: _FilterSheetColors.cancelButtonText,
+                        backgroundColor: AppColors.secondaryAction,
+                        foregroundColor: AppColors.onSurface,
                         side: BorderSide.none,
                       ),
                       child: Text(l10n.filterCancel),
@@ -207,7 +194,7 @@ class _FilterSheetState extends State<FilterSheet> {
                   Text(
                     label,
                     style: AppTypography.bodySemiBoldLg.copyWith(
-                      color: _FilterSheetColors.titleAndLabel,
+                      color: AppColors.onSurface,
                     ),
                   ),
                   const Spacer(),
@@ -215,7 +202,7 @@ class _FilterSheetState extends State<FilterSheet> {
                     isExpanded
                         ? Icons.keyboard_arrow_up
                         : Icons.keyboard_arrow_down,
-                    color: _FilterSheetColors.titleAndLabel,
+                    color: AppColors.onSurface,
                     size: 24,
                   ),
                 ],
@@ -223,7 +210,7 @@ class _FilterSheetState extends State<FilterSheet> {
             ),
           ),
           const SizedBox(height: 12),
-          Divider(height: 1, thickness: 1, color: _FilterSheetColors.divider),
+          const Divider(height: 1, thickness: 1, color: AppColors.border),
         ],
       ),
     );
@@ -245,7 +232,7 @@ class _FilterSheetState extends State<FilterSheet> {
               child: Text(
                 label,
                 style: AppTypography.bodyMediumMd.copyWith(
-                  color: _FilterSheetColors.listItem,
+                  color: AppColors.onSurface,
                 ),
               ),
             ),
@@ -253,14 +240,10 @@ class _FilterSheetState extends State<FilterSheet> {
               width: 24,
               height: 24,
               decoration: BoxDecoration(
-                color: selected
-                    ? _FilterSheetColors.checkboxChecked
-                    : Colors.transparent,
+                color: selected ? AppColors.primary : Colors.transparent,
                 borderRadius: BorderRadius.circular(6),
                 border: Border.all(
-                  color: selected
-                      ? _FilterSheetColors.checkboxChecked
-                      : _FilterSheetColors.divider,
+                  color: selected ? AppColors.primary : AppColors.border,
                   width: 2,
                 ),
               ),

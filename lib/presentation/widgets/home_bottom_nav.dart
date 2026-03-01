@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:pokemons/core/theme/theme.dart';
 
 /// Ítem de la barra de navegación inferior. Icono 24×24; seleccionado = azules del diseño, no seleccionado = gris.
 class HomeNavItem extends StatelessWidget {
@@ -12,8 +13,6 @@ class HomeNavItem extends StatelessWidget {
   });
 
   static const double _iconSize = 24;
-  static const Color _selectedIconColor = Color(0xFF1565C0);
-  static const Color _selectedTextColor = Color(0xFF0D47A1);
 
   final String svgAsset;
   final String label;
@@ -22,9 +21,9 @@ class HomeNavItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final unselectedColor = Theme.of(context).colorScheme.onSurfaceVariant;
-    final iconColor = selected ? _selectedIconColor : unselectedColor;
-    final textColor = selected ? _selectedTextColor : unselectedColor;
+    final unselectedColor = AppColors.textDisable;
+    final iconColor = selected ? AppColors.navSelectedIcon : unselectedColor;
+    final textColor = selected ? AppColors.navSelectedText : unselectedColor;
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
@@ -58,23 +57,20 @@ class HomeBottomNav extends StatelessWidget {
     required this.child,
   });
 
-  static const Color _tabBarBg = Color(0xFFFAFAFA);
-  static const Color _tabBarBorderTop = Color(0xFFE0E0E0);
-
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        color: _tabBarBg,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-        border: const Border(
-          top: BorderSide(color: _tabBarBorderTop, width: 1),
+      decoration: const BoxDecoration(
+        color: AppColors.navBackground,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        border: Border(
+          top: BorderSide(color: AppColors.border, width: 1),
         ),
-        boxShadow: const <BoxShadow>[
+        boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Color(0x1F000000), // black 12%
+            color: AppColors.shadow,
             offset: Offset(0, -1),
             blurRadius: 3,
             spreadRadius: 0,
