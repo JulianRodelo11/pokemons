@@ -9,6 +9,7 @@ import 'package:pokemons/presentation/providers/pokemon_list_provider.dart';
 import 'package:pokemons/presentation/widgets/filter_sheet.dart';
 import 'package:pokemons/presentation/widgets/home_search_bar.dart';
 import 'package:pokemons/presentation/widgets/pokemon_card.dart';
+import 'package:pokemons/presentation/widgets/three_dot_loading.dart';
 import 'package:pokemons/core/constants/app_constants.dart';
 
 class PokedexPage extends ConsumerStatefulWidget {
@@ -21,6 +22,7 @@ class PokedexPage extends ConsumerStatefulWidget {
 class _PokedexPageState extends ConsumerState<PokedexPage> {
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
+  bool _isRetrying = false;
 
   @override
   void initState() {
@@ -63,6 +65,12 @@ class _PokedexPageState extends ConsumerState<PokedexPage> {
       pokemonListProvider,
     );
     final selectedTypes = ref.watch(selectedFilterTypesProvider);
+
+    ref.listen<AsyncValue<List<Pokemon>>>(pokemonListProvider, (_, next) {
+      if (!next.isLoading && _isRetrying && mounted) {
+        setState(() => _isRetrying = false);
+      }
+    });
 
     return asyncPokemonList.when(
       data: (List<Pokemon> _) {
@@ -183,11 +191,13 @@ class _PokedexPageState extends ConsumerState<PokedexPage> {
         );
       },
       loading:
-          () => _buildPokedexLoading(
-            context,
-            l10n,
-            isFilterLoading: selectedTypes.isNotEmpty,
-          ),
+          () => _isRetrying
+              ? _buildErrorState(l10n)
+              : _buildPokedexLoading(
+                  context,
+                  l10n,
+                  isFilterLoading: selectedTypes.isNotEmpty,
+                ),
       error: (Object err, StackTrace? stackTrace) => _buildErrorState(l10n),
     );
   }
@@ -235,13 +245,22 @@ class _PokedexPageState extends ConsumerState<PokedexPage> {
                   SizedBox(
                     width: double.infinity,
                     child: FilledButton(
-                      onPressed: () {
-                        AppConstants.forcePokemonListError = false;
-                        ref.invalidate(pokemonListFutureProvider);
-                        ref.invalidate(pokemonListProvider);
-                        ref.invalidate(filteredByTypesPokemonListProvider);
-                      },
-                      child: Text(l10n.homeErrorRetry),
+                      onPressed: _isRetrying
+                          ? null
+                          : () {
+                              setState(() => _isRetrying = true);
+                              AppConstants.forcePokemonListError = false;
+                              ref.invalidate(pokemonListFutureProvider);
+                              ref.invalidate(pokemonListProvider);
+                              ref.invalidate(filteredByTypesPokemonListProvider);
+                            },
+                      child: _isRetrying
+                          ? const ThreeDotLoading(
+                              color: Colors.white,
+                              size: 10,
+                              spacing: 8,
+                            )
+                          : Text(l10n.homeErrorRetry),
                     ),
                   ),
                 ],

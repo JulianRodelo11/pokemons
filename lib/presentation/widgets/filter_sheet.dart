@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pokemons/core/theme/theme.dart';
 import 'package:pokemons/core/utils/pokemon_utils.dart';
+import 'package:pokemons/core/widgets/sweep_button.dart';
 import 'package:pokemons/l10n/app_localizations.dart';
+import 'package:pokemons/presentation/widgets/three_dot_loading.dart';
 
 /// Altura fija del bottom sheet de filtros.
 const double _kFilterSheetHeight = 614;
@@ -51,6 +53,8 @@ class FilterSheet extends StatefulWidget {
 class _FilterSheetState extends State<FilterSheet> {
   late Set<String> _selected;
   bool _isTypeSectionExpanded = true;
+  bool _isApplying = false;
+  bool _isCancelling = false;
 
   @override
   void initState() {
@@ -147,22 +151,40 @@ class _FilterSheetState extends State<FilterSheet> {
                 children: <Widget>[
                   SizedBox(
                     width: double.infinity,
-                    child: FilledButton(
-                      onPressed: () => widget.onApply(_selected),
-                      child: Text(l10n.filterApply),
+                    height: 48,
+                    child: SweepButton(
+                      onPressed: () {
+                        if (mounted) setState(() => _isApplying = false);
+                        widget.onApply(_selected);
+                      },
+                      onTapDown: _isApplying ? null : () => setState(() => _isApplying = true),
+                      child: _isApplying
+                          ? const ThreeDotLoading(
+                              color: Colors.white,
+                              size: 8,
+                              spacing: 6,
+                            )
+                          : Text(l10n.filterApply),
                     ),
                   ),
                   const SizedBox(height: 12),
                   SizedBox(
                     width: double.infinity,
-                    child: OutlinedButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      style: OutlinedButton.styleFrom(
-                        backgroundColor: AppColors.secondaryAction,
-                        foregroundColor: AppColors.onSurface,
-                        side: BorderSide.none,
-                      ),
-                      child: Text(l10n.filterCancel),
+                    height: 48,
+                    child: SweepButton(
+                      variant: SweepButtonVariant.secondary,
+                      onPressed: () {
+                        if (mounted) setState(() => _isCancelling = false);
+                        Navigator.of(context).pop();
+                      },
+                      onTapDown: _isCancelling ? null : () => setState(() => _isCancelling = true),
+                      child: _isCancelling
+                          ? const ThreeDotLoading(
+                              color: AppColors.onSurface,
+                              size: 8,
+                              spacing: 6,
+                            )
+                          : Text(l10n.filterCancel),
                     ),
                   ),
                   SizedBox(height: MediaQuery.of(context).padding.bottom + 8),

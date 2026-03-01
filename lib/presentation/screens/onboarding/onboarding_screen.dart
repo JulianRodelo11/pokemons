@@ -6,6 +6,7 @@ import 'package:pokemons/core/routes/app_routes.dart';
 import 'package:pokemons/core/widgets/sweep_button.dart';
 import 'package:pokemons/l10n/app_localizations.dart';
 import 'package:pokemons/presentation/screens/onboarding/pages/onboarding_page_one.dart';
+import 'package:pokemons/presentation/widgets/three_dot_loading.dart';
 import 'package:pokemons/presentation/screens/onboarding/pages/onboarding_page_two.dart';
 import 'package:pokemons/presentation/widgets/onboarding_page_indicator.dart';
 
@@ -21,6 +22,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
   static const int _totalPages = 2;
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -28,15 +30,20 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     super.dispose();
   }
 
-  void _next() {
+  void _onTapDown() {
+    if (_isLoading) return;
+    setState(() => _isLoading = true);
+  }
+
+  Future<void> _next() async {
+    if (mounted) setState(() => _isLoading = false);
     if (_currentPage < _totalPages - 1) {
-      _pageController.nextPage(
+      await _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
     } else {
-      // Reemplaza toda la pila: solo queda Home.
-      ref
+      await ref
           .read(navigationServiceProvider)
           .navigateAndRemoveUntil<void>(AppRoutes.home);
     }
@@ -70,11 +77,18 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 height: 58,
                 child: SweepButton(
                   onPressed: _next,
-                  child: Text(
-                    _currentPage < _totalPages - 1
-                        ? l10n.onboardingContinue
-                        : l10n.onboardingStart,
-                  ),
+                  onTapDown: _onTapDown,
+                  child: _isLoading
+                      ? const ThreeDotLoading(
+                          color: Colors.white,
+                          size: 10,
+                          spacing: 8,
+                        )
+                      : Text(
+                          _currentPage < _totalPages - 1
+                              ? l10n.onboardingContinue
+                              : l10n.onboardingStart,
+                        ),
                 ),
               ),
             ),
