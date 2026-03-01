@@ -170,6 +170,60 @@ abstract class AppLocalizations {
   /// **'No Pokémon'**
   String get homeEmptyList;
 
+  /// No description provided for @homeLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading...'**
+  String get homeLoading;
+
+  /// No description provided for @filterSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter by your preferences'**
+  String get filterSheetTitle;
+
+  /// No description provided for @filterSheetTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Type'**
+  String get filterSheetTypeLabel;
+
+  /// No description provided for @filterApply.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply'**
+  String get filterApply;
+
+  /// No description provided for @filterCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get filterCancel;
+
+  /// No description provided for @filterResultsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} results found'**
+  String filterResultsCount(int count);
+
+  /// No description provided for @filterResultsCountPrefix.
+  ///
+  /// In en, this message translates to:
+  /// **''**
+  String get filterResultsCountPrefix;
+
+  /// No description provided for @filterResultsCountSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **' results found'**
+  String get filterResultsCountSuffix;
+
+  /// No description provided for @filterClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear filter'**
+  String get filterClear;
+
   /// No description provided for @navPokedex.
   ///
   /// In en, this message translates to:

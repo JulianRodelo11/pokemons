@@ -15,4 +15,6 @@ abstract class AppColors {
 
   /// Color del indicador de página (onboarding, etc.).
   static const Color pageIndicator = Color(0xFF173EA5);
+
+  static const Color textDisable = Color(0xFF9E9E9E);
 }

@@ -48,6 +48,35 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeEmptyList => 'No Pokémon';
 
   @override
+  String get homeLoading => 'Loading...';
+
+  @override
+  String get filterSheetTitle => 'Filter by your preferences';
+
+  @override
+  String get filterSheetTypeLabel => 'Type';
+
+  @override
+  String get filterApply => 'Apply';
+
+  @override
+  String get filterCancel => 'Cancel';
+
+  @override
+  String filterResultsCount(int count) {
+    return '$count results found';
+  }
+
+  @override
+  String get filterResultsCountPrefix => '';
+
+  @override
+  String get filterResultsCountSuffix => ' results found';
+
+  @override
+  String get filterClear => 'Clear filter';
+
+  @override
   String get navPokedex => 'Pokedex';
 
   @override

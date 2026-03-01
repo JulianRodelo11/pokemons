@@ -8,7 +8,7 @@ import 'package:pokemons/core/theme/theme.dart';
 import 'package:pokemons/l10n/app_localizations.dart';
 
 void main() {
-  final navigatorKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   runApp(
     ProviderScope(
       overrides: [navigatorKeyProvider.overrideWithValue(navigatorKey)],

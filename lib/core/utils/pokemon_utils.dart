@@ -37,6 +37,22 @@ abstract class PokemonUtils {
   static String? typeSvgPath(String typeName) =>
       typeSvgAssets[typeName.toLowerCase()];
 
+  /// Nombre para mostrar del tipo (p. ej. en filtros). Extrae del path del SVG.
+  /// "assets/svg/Type=Fuego.svg" → "Fuego".
+  static String typeDisplayName(String typeKey) {
+    final path = typeSvgAssets[typeKey.toLowerCase()];
+    if (path == null) return typeKey;
+    final match = RegExp(r'Type=([^.]+)').firstMatch(path);
+    return match?.group(1) ?? typeKey;
+  }
+
+  /// Lista ordenada de claves de tipo para usar en filtros (mismo orden que en la UI).
+  static const List<String> filterTypeKeys = <String>[
+    'water', 'dragon', 'electric', 'fairy', 'ghost', 'fire',
+    'grass', 'poison', 'flying', 'bug', 'normal', 'ground',
+    'fighting', 'psychic', 'rock', 'steel', 'ice', 'dark',
+  ];
+
   /// Ruta del SVG de fondo para la imagen del Pokémon por tipo (assets/svg/<>.svg).
   /// Si no existe, usar círculo como fallback.
   static const Map<String, String> backgroundSvgAssets = <String, String>{

@@ -9,6 +9,7 @@ import 'package:pokemons/domain/entities/pokemon.dart';
 import 'package:pokemons/domain/entities/pokemon_detail.dart';
 import 'package:pokemons/presentation/providers/favorites_provider.dart';
 import 'package:pokemons/presentation/providers/pokemon_detail_provider.dart';
+import 'package:pokemons/presentation/providers/pokemon_list_provider.dart';
 import 'package:pokemons/presentation/widgets/pokemon_type_chip.dart';
 
 /// Carta de Pokémon en la lista (número, nombre, tipos, imagen, favorito).
@@ -40,15 +41,26 @@ class PokemonCard extends ConsumerWidget {
     final bool isFavorite = favorites.contains(pokemon.name);
 
     return asyncDetail.when(
-      data: (PokemonDetail detail) => _buildCard(
-        context,
-        ref,
-        types: detail.types,
-        imageUrl: detail.imageUrl.isNotEmpty
-            ? detail.imageUrl
-            : PokemonUtils.officialArtworkUrl(pokemon.id),
-        isFavorite: isFavorite,
-      ),
+      data: (PokemonDetail detail) {
+        if (!ref.read(pokemonTypesCacheProvider).containsKey(pokemon.name)) {
+          final name = pokemon.name;
+          final types = detail.types;
+          Future.microtask(() {
+            ref.read(pokemonTypesCacheProvider.notifier).addAll(
+              <String, List<String>>{name: types},
+            );
+          });
+        }
+        return _buildCard(
+          context,
+          ref,
+          types: detail.types,
+          imageUrl: detail.imageUrl.isNotEmpty
+              ? detail.imageUrl
+              : PokemonUtils.officialArtworkUrl(pokemon.id),
+          isFavorite: isFavorite,
+        );
+      },
       loading: () => _buildCardSkeleton(context),
       error: (Object err, StackTrace? stackTrace) =>
           _buildCardWithFallback(context, ref, isFavorite),

@@ -49,6 +49,12 @@ abstract class AppTheme {
           ),
         ),
       ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: ButtonStyle(
+          minimumSize: WidgetStateProperty.all(const Size(0, 58)),
+          textStyle: WidgetStateProperty.all(AppTypography.buttonLabel),
+        ),
+      ),
     );
   }
 }

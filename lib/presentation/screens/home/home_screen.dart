@@ -6,6 +6,8 @@ import 'package:pokemons/domain/entities/pokemon.dart';
 import 'package:pokemons/l10n/app_localizations.dart';
 import 'package:pokemons/presentation/providers/favorites_provider.dart';
 import 'package:pokemons/presentation/providers/pokemon_list_provider.dart';
+import 'package:pokemons/core/theme/app_colors.dart';
+import 'package:pokemons/presentation/widgets/filter_sheet.dart';
 import 'package:pokemons/presentation/widgets/home_bottom_nav.dart';
 import 'package:pokemons/presentation/widgets/home_search_bar.dart';
 import 'package:pokemons/presentation/widgets/pokemon_card.dart';
@@ -87,10 +89,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Widget _buildPokedexTab(BuildContext context, AppLocalizations l10n) {
-    final asyncList = ref.watch(pokemonListProvider);
-    return asyncList.when(
-      data: (List<Pokemon> list) {
-        final List<Pokemon> filtered = list
+    final asyncFilteredList = ref.watch(filteredByTypesPokemonListProvider);
+    final selectedTypes = ref.watch(selectedFilterTypesProvider);
+
+    return asyncFilteredList.when(
+      data: (List<Pokemon> listByType) {
+        final List<Pokemon> filtered = listByType
             .where((p) => p.name.toLowerCase().contains(_searchQuery))
             .toList();
         return Column(
@@ -100,11 +104,66 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             HomeSearchBar(
               controller: _searchController,
               hint: l10n.homeSearchHint,
+              onSearchButtonTap: () => _openFilterSheet(context),
             ),
+            if (selectedTypes.isNotEmpty) ...[
+              const SizedBox(height: 18),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  children: <Widget>[
+                    Text.rich(
+                      TextSpan(
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: l10n.filterResultsCountPrefix,
+                            style: AppTypography.bodyMediumMd.copyWith(
+                              color: AppColors.textDisable,
+                            ),
+                          ),
+                          TextSpan(
+                            text: '${filtered.length}',
+                            style: AppTypography.bodyBoldMd.copyWith(
+                              color: AppColors.textDisable,
+                            ),
+                          ),
+                          TextSpan(
+                            text: l10n.filterResultsCountSuffix,
+                            style: AppTypography.bodyBoldMd.copyWith(
+                              color: AppColors.textDisable,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Spacer(),
+                    GestureDetector(
+                      onTap: () {
+                        ref.read(selectedFilterTypesProvider.notifier).clear();
+                      },
+                      child: Text(
+                        l10n.filterClear,
+                        style: AppTypography.bodyMediumMdUnderline.copyWith(
+                          color: AppColors.primary,
+                          decorationColor: AppColors.primary,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
             const SizedBox(height: 16),
             Expanded(
               child: filtered.isEmpty
-                  ? Center(child: Text(l10n.homeEmptyList))
+                  ? Center(
+                      child: Text(
+                        l10n.homeEmptyList,
+                        style: AppTypography.bodyMedium.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    )
                   : ListView.builder(
                       padding: const EdgeInsets.only(
                         left: 16,
@@ -129,15 +188,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ],
         );
       },
-      loading: () => Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          const SizedBox(height: 16),
-          HomeSearchBar(
-            controller: _searchController,
-            hint: l10n.homeSearchHint,
-          ),
-        ],
+      loading: () => _buildPokedexLoading(
+        context,
+        l10n,
+        isFilterLoading: selectedTypes.isNotEmpty,
       ),
       error: (Object err, StackTrace? stackTrace) => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -184,6 +238,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         onPressed: () {
                           ref.invalidate(pokemonListFutureProvider);
                           ref.invalidate(pokemonListProvider);
+                          ref.invalidate(filteredByTypesPokemonListProvider);
                         },
                         child: Text(l10n.homeErrorRetry),
                       ),
@@ -339,6 +394,64 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   void _openDetail(BuildContext context, String name) {
     Navigator.of(context).pushNamed(AppRoutes.detail, arguments: name);
+  }
+
+  Widget _buildPokedexLoading(
+    BuildContext context,
+    AppLocalizations l10n, {
+    required bool isFilterLoading,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        const SizedBox(height: 16),
+        HomeSearchBar(
+          controller: _searchController,
+          hint: l10n.homeSearchHint,
+          onSearchButtonTap: () => _openFilterSheet(context),
+        ),
+        if (isFilterLoading) ...[
+          const SizedBox(height: 16),
+          Expanded(
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  SizedBox(
+                    width: 48,
+                    height: 48,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 3,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    l10n.homeLoading,
+                    style: AppTypography.bodyMedium.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+
+  Future<void> _openFilterSheet(BuildContext context) async {
+    final Set<String> current = ref.read(selectedFilterTypesProvider);
+    final Set<String>? result = await FilterSheet.show(
+      context,
+      initialSelected: current,
+    );
+    if (result != null && mounted) {
+      ref.read(selectedFilterTypesProvider.notifier).setTypes(result);
+    }
   }
 }
 

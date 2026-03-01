@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pokemons/core/theme/app_typography.dart';
+import 'package:pokemons/core/theme/theme.dart';
 
 /// Barra de búsqueda: input tipo pill y botón circular, fondo blanco y borde gris claro.
 class HomeSearchBar extends StatelessWidget {
@@ -8,13 +9,14 @@ class HomeSearchBar extends StatelessWidget {
     super.key,
     required this.controller,
     required this.hint,
+    this.onSearchButtonTap,
   });
 
   final TextEditingController controller;
   final String hint;
+  final VoidCallback? onSearchButtonTap;
 
   static const Color _borderColor = Color(0xFFE0E0E0);
-  static const Color _iconAndHintColor = Color(0xFF9E9E9E);
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +42,7 @@ class HomeSearchBar extends StatelessWidget {
                     decoration: InputDecoration(
                       hintText: hint,
                       hintStyle: AppTypography.searchHint.copyWith(
-                        color: _iconAndHintColor,
+                        color: AppColors.textDisable,
                       ),
                       border: InputBorder.none,
                       filled: true,
@@ -56,7 +58,7 @@ class HomeSearchBar extends StatelessWidget {
                       width: 20,
                       height: 20,
                       colorFilter: const ColorFilter.mode(
-                        _iconAndHintColor,
+                        AppColors.textDisable,
                         BlendMode.srcIn,
                       ),
                     ),
@@ -72,7 +74,7 @@ class HomeSearchBar extends StatelessWidget {
             child: Material(
               color: Colors.transparent,
               child: InkWell(
-                onTap: () {},
+                onTap: onSearchButtonTap,
                 customBorder: const CircleBorder(),
                 child: Container(
                   decoration: BoxDecoration(
@@ -81,14 +83,10 @@ class HomeSearchBar extends StatelessWidget {
                     border: Border.all(color: _borderColor, width: 1),
                   ),
                   alignment: Alignment.center,
-                  child: SvgPicture.asset(
-                    'assets/svg/search.svg',
-                    width: 20,
-                    height: 20,
-                    colorFilter: const ColorFilter.mode(
-                      _iconAndHintColor,
-                      BlendMode.srcIn,
-                    ),
+                  child: Icon(
+                    Icons.filter_list,
+                    color: AppColors.textDisable,
+                    size: 24,
                   ),
                 ),
               ),

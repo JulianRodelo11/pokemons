@@ -188,9 +188,8 @@ class _DetailBody extends ConsumerWidget {
                       alignment: Alignment.center,
                       child: Text(
                         l10n.detailLabelGenero,
-                        style: AppTypography.bodyMedium.copyWith(
+                        style: AppTypography.labelMediumXs.copyWith(
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),
@@ -231,8 +230,7 @@ class _DetailBody extends ConsumerWidget {
                     const SizedBox(height: 30),
                     Text(
                       l10n.detailDebilidades,
-                      style: AppTypography.headingMedium.copyWith(
-                        fontSize: 18,
+                      style: AppTypography.bodyMediumLg.copyWith(
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
@@ -490,9 +488,7 @@ class _AttributeCard extends StatelessWidget {
           child: Center(
             child: Text(
               value,
-              style: AppTypography.bodyMedium.copyWith(
-                fontWeight: FontWeight.w600,
-                fontSize: 15,
+              style: AppTypography.bodyMediumLg.copyWith(
                 color: Theme.of(context).colorScheme.onSurface,
               ),
             ),

@@ -12,6 +12,20 @@
   "homeTitle": "Pokémon",
   "homeSearchHint": "Procurar Pokémon...",
   "homeEmptyList": "No hay Pokémon",
+  "homeLoading": "Cargando...",
+  "filterSheetTitle": "Filtra por tus preferencias",
+  "filterSheetTypeLabel": "Tipo",
+  "filterApply": "Aplicar",
+  "filterCancel": "Cancelar",
+  "filterResultsCount": "Se han encontrado {count} resultados",
+  "@filterResultsCount": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "filterResultsCountPrefix": "Se han encontrado ",
+  "filterResultsCountSuffix": " resultados",
+  "filterClear": "Borrar filtro",
   "navPokedex": "Pokedex",
   "navRegiones": "Regiones",
   "regionsComingSoonTitle": "¡Muy pronto disponible!",
