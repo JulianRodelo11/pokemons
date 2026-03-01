@@ -54,10 +54,10 @@ class PokemonRemoteDataSourceImpl implements PokemonRemoteDataSource {
     final List<String> abilityUrls = _parseAbilityUrls(data);
     final Map<String, List<String>> abilityNamesByLocale =
         await _fetchAbilityNamesByLocale(abilityUrls, model.abilities);
-    developer.log(
+    /*developer.log(
       'abilityNamesByLocale: es=${abilityNamesByLocale['es']}, '
       'en=${abilityNamesByLocale['en']}',
-    );
+    );*/
     return model.copyWith(
       category: speciesExtra.category,
       abilityNamesByLocale: abilityNamesByLocale,
@@ -137,11 +137,11 @@ class PokemonRemoteDataSourceImpl implements PokemonRemoteDataSource {
         }
         result['es']!.add(nameEs.isNotEmpty ? nameEs : fallback);
         result['en']!.add(nameEn.isNotEmpty ? nameEn : fallback);
-        developer.log(
+        /*developer.log(
           'ability $abilityId: es="$nameEs" en="$nameEn" (fallback: "$fallback")',
-        );
+        );*/
       } catch (e, st) {
-        developer.log('ability $abilityId error: $e', stackTrace: st);
+        //developer.log('ability $abilityId error: $e', stackTrace: st);
         result['es']!.add(fallback);
         result['en']!.add(fallback);
       }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pokemons/core/theme/app_typography.dart';
 import 'package:pokemons/l10n/app_localizations.dart';
 import 'package:pokemons/presentation/providers/locale_provider.dart';
 
@@ -28,9 +29,9 @@ class PerfilPage extends ConsumerWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
             l10n.profileChangeLanguage,
-            style: Theme.of(
-              context,
-            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+            style: AppTypography.bodyMediumLg.copyWith(
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
           ),
         ),
         const SizedBox(height: 10),
