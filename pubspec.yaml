@@ -1,5 +1,5 @@
 name: pokemons
-description: "A new Flutter project."
+description: "Aplicación de Pokédex desarrollada en Flutter con arquitectura limpia, gestión de estado con Riverpod, modelos inmutables con Freezed, soporte multi-idioma y tests de flujo de UI."
 publish_to: 'none'
 version: 0.1.0
 
