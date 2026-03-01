@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pokemons/l10n/app_localizations.dart';
 import 'package:pokemons/presentation/providers/locale_provider.dart';
@@ -29,9 +28,7 @@ class TestAppWrapper extends ConsumerWidget {
       supportedLocales: AppLocalizations.supportedLocales,
       builder: (context, widget) {
         // Aseguramos que el builder tenga acceso a las localizaciones
-        return Material(
-          child: widget,
-        );
+        return Material(child: widget);
       },
       home: child,
     );

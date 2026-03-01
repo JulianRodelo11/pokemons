@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pokemons/core/navigation/navigation_providers.dart';
 import 'package:pokemons/core/navigation/navigation_service.dart';
 import 'package:pokemons/core/routes/app_routes.dart';
@@ -14,23 +13,25 @@ class MockNavigationOnboarding extends NavigationService {
   String? navigatedRoute;
 
   @override
-  Future<T?> navigateAndRemoveUntil<T>(String routeName, {Object? arguments}) async {
+  Future<T?> navigateAndRemoveUntil<T>(
+    String routeName, {
+    Object? arguments,
+  }) async {
     navigatedRoute = routeName;
     return null;
   }
 }
 
 void main() {
-  testWidgets('Onboarding flow: navigate to Home after two pages',
-      (WidgetTester tester) async {
+  testWidgets('Onboarding flow: navigate to Home after two pages', (
+    WidgetTester tester,
+  ) async {
     final navigatorKey = GlobalKey<NavigatorState>();
     final mockNav = MockNavigationOnboarding(navigatorKey);
 
     await tester.pumpWidget(
       createTestWidget(
-        overrides: [
-          navigationServiceProvider.overrideWithValue(mockNav),
-        ],
+        overrides: [navigationServiceProvider.overrideWithValue(mockNav)],
         child: const OnboardingScreen(),
       ),
     );

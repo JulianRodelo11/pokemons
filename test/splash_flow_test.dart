@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pokemons/core/navigation/navigation_providers.dart';
 import 'package:pokemons/core/navigation/navigation_service.dart';
 import 'package:pokemons/presentation/screens/splash/splash_screen.dart';
@@ -27,16 +26,15 @@ class MockNavigationService extends NavigationService {
 }
 
 void main() {
-  testWidgets('SplashScreen navigates to Onboarding after duration',
-      (WidgetTester tester) async {
+  testWidgets('SplashScreen navigates to Onboarding after duration', (
+    WidgetTester tester,
+  ) async {
     final navigatorKey = GlobalKey<NavigatorState>();
     final mockNav = MockNavigationService(navigatorKey);
 
     await tester.pumpWidget(
       createTestWidget(
-        overrides: [
-          navigationServiceProvider.overrideWithValue(mockNav),
-        ],
+        overrides: [navigationServiceProvider.overrideWithValue(mockNav)],
         child: const SplashScreen(),
       ),
     );

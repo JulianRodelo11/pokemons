@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pokemons/presentation/screens/home/pages/pokedex_page.dart';
 import 'package:pokemons/presentation/providers/pokemon_list_provider.dart';
 import 'package:pokemons/presentation/providers/pokemon_detail_provider.dart';
@@ -10,8 +9,9 @@ import 'package:pokemons/presentation/widgets/pokemon_card.dart';
 import 'test_utils.dart';
 
 void main() {
-  testWidgets('Pokedex flow: load list and search by name',
-      (WidgetTester tester) async {
+  testWidgets('Pokedex flow: load list and search by name', (
+    WidgetTester tester,
+  ) async {
     final mockPokemons = [
       const Pokemon(id: 1, name: 'bulbasaur', url: ''),
       const Pokemon(id: 4, name: 'charmander', url: ''),
@@ -23,17 +23,19 @@ void main() {
         overrides: [
           pokemonListFutureProvider.overrideWith((ref) async => mockPokemons),
           // Necesario porque PokemonCard hace ref.watch(pokemonDetailProvider)
-          pokemonDetailProvider.overrideWith((ref, key) async => PokemonDetail(
-                id: 1,
-                name: key.name,
-                imageUrl: '',
-                height: 7,
-                weight: 69,
-                types: ['grass', 'poison'],
-                stats: {},
-                category: 'Seed',
-                abilities: ['overgrow'],
-              )),
+          pokemonDetailProvider.overrideWith(
+            (ref, key) async => PokemonDetail(
+              id: 1,
+              name: key.name,
+              imageUrl: '',
+              height: 7,
+              weight: 69,
+              types: ['grass', 'poison'],
+              stats: {},
+              category: 'Seed',
+              abilities: ['overgrow'],
+            ),
+          ),
         ],
         child: const PokedexPage(),
       ),

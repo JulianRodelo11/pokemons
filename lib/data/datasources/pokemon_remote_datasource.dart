@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer' as developer;
 
 import 'package:dio/dio.dart';
 import 'package:pokemons/core/constants/app_constants.dart';
@@ -140,7 +139,7 @@ class PokemonRemoteDataSourceImpl implements PokemonRemoteDataSource {
         /*developer.log(
           'ability $abilityId: es="$nameEs" en="$nameEn" (fallback: "$fallback")',
         );*/
-      } catch (e, st) {
+      } catch (e) {
         //developer.log('ability $abilityId error: $e', stackTrace: st);
         result['es']!.add(fallback);
         result['en']!.add(fallback);
