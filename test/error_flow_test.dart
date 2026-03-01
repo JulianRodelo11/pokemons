@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pokemons/presentation/screens/home/pages/pokedex_page.dart';
 import 'package:pokemons/presentation/providers/pokemon_list_provider.dart';
 import 'package:pokemons/presentation/providers/pokemon_detail_provider.dart';

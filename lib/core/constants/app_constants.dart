@@ -6,10 +6,10 @@ class AppConstants {
   static const String pokeApiBaseUrl = 'https://pokeapi.co/api/v2';
 
   /// Si true, getPokemonList() lanza error al instante sin llamar a la API (solo para probar UI de error).
-  static bool forcePokemonListError = true;
+  static bool forcePokemonListError = false;
 
   // --- UX/UI Animations ---
-  static const Duration splashDuration = Duration(milliseconds: 1500);
+  static const Duration splashDuration = Duration(milliseconds: 2500);
   static const Duration splashFadeDuration = Duration(milliseconds: 400);
   static const Duration animationFast = Duration(milliseconds: 300);
 

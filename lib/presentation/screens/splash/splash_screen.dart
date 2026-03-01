@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -25,40 +24,29 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
       ? AppConstants.splashFadeDuration
       : AppConstants.splashDuration;
 
-  bool _started = false;
-  DateTime? _splashStart;
-  late final Ticker _ticker;
-  double _rotationValue = 0;
+  late final AnimationController _controller;
+  late final Animation<double> _animation;
 
   @override
   void initState() {
     super.initState();
-    _splashStart = DateTime.now();
-    _ticker = createTicker((Duration elapsed) {
-      if (_splashStart == null || !mounted) return;
-      final int ms = DateTime.now().difference(_splashStart!).inMilliseconds;
-      // Una rotación completa durante el tiempo que dura la pantalla
-      final double progress = (ms / _splashDuration.inMilliseconds).clamp(
-        0.0,
-        1.0,
-      );
-      setState(
-        () => _rotationValue = Curves.easeInOutCubic.transform(progress),
-      );
-    });
-    _ticker.start();
+    _controller = AnimationController(vsync: this, duration: _splashDuration);
+
+    _animation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOutCubic,
+    );
+
+    _controller.forward().then((_) => _goToNext());
   }
 
   @override
   void dispose() {
-    _ticker.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
-  Future<void> _loadAndGoToHome() async {
-    if (_started) return;
-    _started = true;
-    await Future<void>.delayed(_splashDuration);
+  void _goToNext() {
     if (!mounted) return;
     ref
         .read(navigationServiceProvider)
@@ -71,22 +59,23 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
-    if (!_started) {
-      WidgetsBinding.instance.addPostFrameCallback(
-        (Duration _) => _loadAndGoToHome(),
-      );
-    }
     return Scaffold(
       body: Center(
-        child: Transform(
-          alignment: Alignment.center,
-          transform: Matrix4.identity()
-            ..setEntry(3, 2, 0.001)
-            ..rotateY(_rotationValue * 2 * math.pi),
+        child: AnimatedBuilder(
+          animation: _animation,
+          builder: (context, child) {
+            return Transform(
+              alignment: Alignment.center,
+              transform: Matrix4.identity()
+                ..setEntry(3, 2, 0.001)
+                ..rotateY(_animation.value * 6 * math.pi),
+              child: child,
+            );
+          },
           child: SvgPicture.asset(
             AssetsPaths.svgLoader,
-            width: 155,
-            height: 155,
+            width: 120,
+            height: 120,
             fit: BoxFit.contain,
           ),
         ),
