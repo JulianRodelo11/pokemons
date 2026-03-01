@@ -17,9 +17,8 @@ dependencies:
   riverpod_annotation: ^4.0.2
   # Modelos inmutables (entidades, DTOs)
   freezed_annotation: ^3.1.0
-  json_annotation: ^4.9.0
-  flutter_svg: ^2.0.16
-  flutter_slidable: ^3.1.1
+  json_annotation: ^4.11.0
+  flutter_svg: ^2.2.3
   google_fonts: ^8.0.2
 
 dev_dependencies:
@@ -29,8 +28,9 @@ dev_dependencies:
   # Generación de código (freezed + riverpod_generator)
   build_runner: ^2.11.1
   freezed: ^3.2.5
-  json_serializable: ^6.9.2
+  json_serializable: ^6.13.0
   riverpod_generator: ^4.0.3
+  flutter_launcher_icons: ^0.14.4
 
 # Necesario con Dart 3.9 / Flutter actual: el SDK fija test_api 0.7.6 y choca con
 # analyzer 9+ (freezed 3 / build_runner 2.10.5+). Este override permite el stack actual.
