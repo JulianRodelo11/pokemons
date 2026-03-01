@@ -142,7 +142,7 @@ class _FilterSheetState extends State<FilterSheet> {
               ],
             ),
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
               child: Column(
                 children: <Widget>[
                   SizedBox(

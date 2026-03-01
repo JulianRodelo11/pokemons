@@ -77,10 +77,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get filterClear => 'Clear filter';
 
   @override
-  String get navPokedex => 'Pokedex';
+  String get navPokedex => 'Pokédex';
 
   @override
-  String get navRegiones => 'Regiones';
+  String get navRegiones => 'Regions';
 
   @override
   String get regionsComingSoonTitle => 'Coming soon!';
@@ -90,7 +90,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'We are working to bring you this section. Check back later to discover all the news.';
 
   @override
-  String get navFavoritos => 'favoritos';
+  String get navFavoritos => 'Favorites';
 
   @override
   String get favoritesEmpty => 'No favorites yet';
@@ -104,7 +104,16 @@ class AppLocalizationsEn extends AppLocalizations {
       'Tap the heart icon on your favorite Pokémon and they will appear here.';
 
   @override
-  String get navPerfil => 'Perfil';
+  String get navPerfil => 'Profile';
+
+  @override
+  String get profileChangeLanguage => 'Change language';
+
+  @override
+  String get profileLanguageEnglish => 'English';
+
+  @override
+  String get profileLanguageSpanish => 'Spanish';
 
   @override
   String homeError(String error) {

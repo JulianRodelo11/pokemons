@@ -36,7 +36,7 @@ abstract class AppTheme {
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: ButtonStyle(
-          minimumSize: WidgetStateProperty.all(const Size(0, 58)),
+          minimumSize: WidgetStateProperty.all(const Size(0, 48)),
           backgroundColor: WidgetStateProperty.all(colorScheme.primary),
           foregroundColor: WidgetStateProperty.all(colorScheme.onPrimary),
           textStyle: WidgetStateProperty.all(AppTypography.buttonLabel),
@@ -51,7 +51,7 @@ abstract class AppTheme {
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: ButtonStyle(
-          minimumSize: WidgetStateProperty.all(const Size(0, 58)),
+          minimumSize: WidgetStateProperty.all(const Size(0, 48)),
           textStyle: WidgetStateProperty.all(AppTypography.buttonLabel),
         ),
       ),

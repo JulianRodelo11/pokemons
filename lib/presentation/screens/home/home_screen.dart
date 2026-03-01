@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pokemons/l10n/app_localizations.dart';
+import 'package:pokemons/presentation/providers/locale_provider.dart';
 import 'package:pokemons/presentation/screens/home/pages/favoritos_page.dart';
 import 'package:pokemons/presentation/screens/home/pages/perfil_page.dart';
 import 'package:pokemons/presentation/screens/home/pages/pokedex_page.dart';
@@ -20,6 +21,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ref.watch(localeProvider);
     final AppLocalizations l10n = AppLocalizations.of(context)!;
     return Scaffold(
       body: SafeArea(

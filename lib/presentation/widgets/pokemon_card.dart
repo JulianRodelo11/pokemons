@@ -278,11 +278,7 @@ class PokemonCard extends ConsumerWidget {
 
     return Padding(
       padding: padding,
-      child: SizedBox(
-        width: contentWidth,
-        height: contentHeight,
-        child: shape,
-      ),
+      child: SizedBox(width: contentWidth, height: contentHeight, child: shape),
     );
   }
 

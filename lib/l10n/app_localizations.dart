@@ -227,13 +227,13 @@ abstract class AppLocalizations {
   /// No description provided for @navPokedex.
   ///
   /// In en, this message translates to:
-  /// **'Pokedex'**
+  /// **'Pokédex'**
   String get navPokedex;
 
   /// No description provided for @navRegiones.
   ///
   /// In en, this message translates to:
-  /// **'Regiones'**
+  /// **'Regions'**
   String get navRegiones;
 
   /// No description provided for @regionsComingSoonTitle.
@@ -251,7 +251,7 @@ abstract class AppLocalizations {
   /// No description provided for @navFavoritos.
   ///
   /// In en, this message translates to:
-  /// **'favoritos'**
+  /// **'Favorites'**
   String get navFavoritos;
 
   /// No description provided for @favoritesEmpty.
@@ -275,8 +275,26 @@ abstract class AppLocalizations {
   /// No description provided for @navPerfil.
   ///
   /// In en, this message translates to:
-  /// **'Perfil'**
+  /// **'Profile'**
   String get navPerfil;
+
+  /// No description provided for @profileChangeLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Change language'**
+  String get profileChangeLanguage;
+
+  /// No description provided for @profileLanguageEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get profileLanguageEnglish;
+
+  /// No description provided for @profileLanguageSpanish.
+  ///
+  /// In en, this message translates to:
+  /// **'Spanish'**
+  String get profileLanguageSpanish;
 
   /// No description provided for @homeError.
   ///

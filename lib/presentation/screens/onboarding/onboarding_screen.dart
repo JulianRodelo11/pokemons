@@ -55,10 +55,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 controller: _pageController,
                 onPageChanged: (int index) =>
                     setState(() => _currentPage = index),
-                children: const [
-                  OnboardingPageOne(),
-                  OnboardingPageTwo(),
-                ],
+                children: const [OnboardingPageOne(), OnboardingPageTwo()],
               ),
             ),
             OnboardingPageIndicator(
