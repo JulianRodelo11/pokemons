@@ -29,4 +29,28 @@ abstract class AppTypography {
         height: 1.5,
         letterSpacing: 0,
       );
+
+  /// Número del Pokémon en la carta: Poppins SemiBold 12px, line-height 100%.
+  static TextStyle get pokemonCardNumber => GoogleFonts.poppins(
+        fontWeight: FontWeight.w600,
+        fontSize: 12,
+        height: 1.0,
+        letterSpacing: 0,
+      );
+
+  /// Nombre del Pokémon en la carta: Poppins SemiBold 21px, line-height 100%.
+  static TextStyle get pokemonCardName => GoogleFonts.poppins(
+        fontWeight: FontWeight.w600,
+        fontSize: 21,
+        height: 1.0,
+        letterSpacing: 0,
+      );
+
+  /// Placeholder de búsqueda: Poppins Regular 14px, line-height 100%.
+  static TextStyle get searchHint => GoogleFonts.poppins(
+        fontWeight: FontWeight.w400,
+        fontSize: 14,
+        height: 1.0,
+        letterSpacing: 0,
+      );
 }

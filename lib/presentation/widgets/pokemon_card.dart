@@ -1,0 +1,465 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:pokemons/core/theme/app_typography.dart';
+import 'package:pokemons/core/theme/pokemon_type_colors.dart';
+import 'package:pokemons/core/utils/pokemon_utils.dart';
+import 'package:pokemons/core/utils/string_utils.dart';
+import 'package:pokemons/domain/entities/pokemon.dart';
+import 'package:pokemons/domain/entities/pokemon_detail.dart';
+import 'package:pokemons/presentation/providers/favorites_provider.dart';
+import 'package:pokemons/presentation/providers/pokemon_detail_provider.dart';
+import 'package:pokemons/presentation/widgets/pokemon_type_chip.dart';
+
+/// Carta de Pokémon en la lista (número, nombre, tipos, imagen, favorito).
+/// [listIndex] es el índice en la lista (0-based).
+/// El número mostrado (N°XXX) es el id del Pokémon extraído de la URL de la API (ej. .../pokemon/1/ → 1).
+class PokemonCard extends ConsumerWidget {
+  const PokemonCard({
+    super.key,
+    required this.pokemon,
+    required this.listIndex,
+    required this.onTap,
+  });
+
+  final Pokemon pokemon;
+  final int listIndex;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Cargamos el detalle desde la lista porque la API de lista no devuelve la imagen;
+    // de lo contrario esta petición se haría solo al entrar a la pantalla de detalle.
+    final locale = Localizations.localeOf(context).languageCode;
+    final AsyncValue<PokemonDetail> asyncDetail = ref.watch(
+      pokemonDetailProvider(
+        PokemonDetailKey(name: pokemon.name, locale: locale),
+      ),
+    );
+    final Set<String> favorites = ref.watch(favoritesProvider);
+    final bool isFavorite = favorites.contains(pokemon.name);
+
+    return asyncDetail.when(
+      data: (PokemonDetail detail) => _buildCard(
+        context,
+        ref,
+        types: detail.types,
+        imageUrl: detail.imageUrl.isNotEmpty
+            ? detail.imageUrl
+            : PokemonUtils.officialArtworkUrl(pokemon.id),
+        isFavorite: isFavorite,
+      ),
+      loading: () => _buildCardSkeleton(context),
+      error: (Object err, StackTrace? stackTrace) =>
+          _buildCardWithFallback(context, ref, isFavorite),
+    );
+  }
+
+  Widget _buildCard(
+    BuildContext context,
+    WidgetRef ref, {
+    required List<String> types,
+    required String imageUrl,
+    required bool isFavorite,
+  }) {
+    final Color cardColor = PokemonTypeColors.cardBackground(types);
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          height: 102,
+          decoration: BoxDecoration(
+            color: cardColor.withValues(alpha: 0.5),
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: Stack(
+              children: <Widget>[
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          left: 12,
+                          top: 12,
+                          bottom: 12,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Text(
+                              PokemonUtils.formatNumber(
+                                pokemon.id > 0 ? pokemon.id : listIndex + 1,
+                              ),
+                              style: AppTypography.pokemonCardNumber.copyWith(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurface.withValues(alpha: 0.8),
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              StringUtils.capitalize(pokemon.name),
+                              style: AppTypography.pokemonCardName,
+                            ),
+                            if (types.isNotEmpty) ...[
+                              const SizedBox(height: 8),
+                              Wrap(
+                                spacing: 6,
+                                runSpacing: 6,
+                                children: types
+                                    .map((t) => PokemonTypeChip(typeName: t))
+                                    .toList(),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 126,
+                      height: 102,
+                      child: Stack(
+                        children: <Widget>[
+                          Positioned.fill(
+                            child: Hero(
+                              tag: 'pokemon-card-bg-${pokemon.name}',
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: cardColor,
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(16),
+                                  ),
+                                  border: Border.all(
+                                    color: cardColor.withValues(alpha: 0.8),
+                                    width: 1,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Positioned.fill(
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: <Widget>[
+                                Positioned.fill(
+                                  child: _buildImageBackground(
+                                    types,
+                                    cardColor,
+                                    pokemon.name,
+                                  ),
+                                ),
+                                Hero(
+                                  tag: 'pokemon-image-${pokemon.name}',
+                                  child: Image.network(
+                                    imageUrl,
+                                    height: 88,
+                                    width: 88,
+                                    fit: BoxFit.contain,
+                                    errorBuilder:
+                                        (
+                                          BuildContext context,
+                                          error,
+                                          stackTrace,
+                                        ) => Icon(
+                                          Icons.image_not_supported_rounded,
+                                          size: 48,
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.onSurfaceVariant,
+                                        ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: IconButton(
+                    icon: Hero(
+                      tag: 'pokemon-favorite-${pokemon.name}',
+                      child: _FavoriteHeartIcon(isFavorite: isFavorite),
+                    ),
+                    onPressed: () => ref
+                        .read(favoritesProvider.notifier)
+                        .toggle(pokemon.name),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Fondo detrás de la imagen: padding, medidas 94×91.37, SVG/círculo con degradé aplicado a la forma.
+  /// El degradé (blanco → blanco 0%) se aplica al SVG con [ShaderMask] para que se vea en la forma.
+  Widget _buildImageBackground(
+    List<String> types,
+    Color cardColor,
+    String pokemonName,
+  ) {
+    const double contentWidth = 94;
+    const double contentHeight = 91.37;
+    const EdgeInsets padding = EdgeInsets.all(6);
+
+    const LinearGradient shapeGradient = LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: <Color>[
+        Color(0xFFFFFFFF),
+        Color(
+          0x26FFFFFF,
+        ), // ~15% opacidad para que la parte inferior siga visible
+      ],
+    );
+
+    final path = types.isNotEmpty
+        ? PokemonUtils.backgroundSvgPath(types.first)
+        : null;
+
+    // Resolución 2× para que el Hero no se pixele al escalar en la animación
+    const double heroScale = 2.0;
+    final double heroW = contentWidth * heroScale;
+    final double heroH = contentHeight * heroScale;
+
+    Widget shape;
+    if (path != null) {
+      shape = ClipRect(
+        child: OverflowBox(
+          maxWidth: heroW,
+          maxHeight: heroH,
+          alignment: Alignment.center,
+          child: Transform.scale(
+            scale: 1 / heroScale,
+            alignment: Alignment.center,
+            child: Hero(
+              tag: 'pokemon-bg-svg-$pokemonName',
+              child: SizedBox(
+                width: heroW,
+                height: heroH,
+                child: SvgPicture.asset(path, fit: BoxFit.contain),
+              ),
+            ),
+          ),
+        ),
+      );
+    } else {
+      shape = DecoratedBox(
+        decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+        child: const SizedBox.expand(),
+      );
+    }
+
+    return Padding(
+      padding: padding,
+      child: SizedBox(
+        width: contentWidth,
+        height: contentHeight,
+        child: ShaderMask(
+          blendMode: BlendMode.srcIn,
+          shaderCallback: (Rect bounds) => shapeGradient.createShader(bounds),
+          child: shape,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCardSkeleton(BuildContext context) {
+    return Container(
+      height: 102,
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  width: 60,
+                  height: 12,
+                  decoration: BoxDecoration(
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.onSurface.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Container(
+                  width: 100,
+                  height: 18,
+                  decoration: BoxDecoration(
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.onSurface.withValues(alpha: 0.3),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            width: 80,
+            height: 80,
+            child: Center(
+              child: Container(
+                width: 64,
+                height: 64,
+                decoration: BoxDecoration(
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSurface.withValues(alpha: 0.12),
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCardWithFallback(
+    BuildContext context,
+    WidgetRef ref,
+    bool isFavorite,
+  ) {
+    const fallbackColor = Color(0xFF9DA0AA);
+    final imageUrl = PokemonUtils.officialArtworkUrl(pokemon.id);
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          height: 102,
+          decoration: BoxDecoration(
+            color: fallbackColor.withValues(alpha: 0.5),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: fallbackColor.withValues(alpha: 0.5),
+              width: 1,
+            ),
+          ),
+          child: Stack(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text(
+                            PokemonUtils.formatNumber(
+                              pokemon.id > 0 ? pokemon.id : listIndex + 1,
+                            ),
+                            style: AppTypography.pokemonCardNumber,
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            StringUtils.capitalize(pokemon.name),
+                            style: AppTypography.pokemonCardName,
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      width: 100,
+                      height: 100,
+                      child: Hero(
+                        tag: 'pokemon-image-${pokemon.name}',
+                        child: Image.network(
+                          imageUrl,
+                          height: 88,
+                          width: 88,
+                          fit: BoxFit.contain,
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Icon(
+                                Icons.image_not_supported_rounded,
+                                size: 48,
+                              ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Positioned(
+                top: 12,
+                right: 12,
+                child: IconButton(
+                  icon: Hero(
+                    tag: 'pokemon-favorite-${pokemon.name}',
+                    child: _FavoriteHeartIcon(isFavorite: isFavorite),
+                  ),
+                  onPressed: () =>
+                      ref.read(favoritesProvider.notifier).toggle(pokemon.name),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Icono de favorito: [Heart.svg] (outline) o [HeartSolid.svg] (relleno). Color blanco y borde blanco.
+class _FavoriteHeartIcon extends StatelessWidget {
+  const _FavoriteHeartIcon({required this.isFavorite});
+
+  static const double _size = 16.0;
+  static const double _borderWidth = 2.0;
+
+  final bool isFavorite;
+
+  @override
+  Widget build(BuildContext context) {
+    final path = isFavorite
+        ? 'assets/svg/HeartSolid.svg'
+        : 'assets/svg/Heart.svg';
+    return Container(
+      width: _size * 2,
+      height: _size * 2,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(color: Colors.white, width: _borderWidth),
+        color: Colors.black.withValues(alpha: 0.3),
+      ),
+      alignment: Alignment.center,
+      child: SizedBox(
+        width: _size,
+        height: _size,
+        child: SvgPicture.asset(
+          path,
+          width: _size,
+          height: _size,
+          colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
+        ),
+      ),
+    );
+  }
+}

@@ -11,6 +11,12 @@ class PokemonDetailModel {
     required this.weight,
     required this.types,
     required this.stats,
+    this.category = '',
+    this.abilities = const [],
+    this.abilityNamesByLocale = const {},
+    this.maleRatio,
+    this.femaleRatio,
+    this.description = '',
   });
   final int id;
   final String name;
@@ -19,6 +25,12 @@ class PokemonDetailModel {
   final int weight;
   final List<String> types;
   final Map<String, int> stats;
+  final String category;
+  final List<String> abilities;
+  final Map<String, List<String>> abilityNamesByLocale;
+  final double? maleRatio;
+  final double? femaleRatio;
+  final String description;
 
   factory PokemonDetailModel.fromJson(Map<String, dynamic> json) {
     final Map<String, dynamic>? sprites =
@@ -42,6 +54,12 @@ class PokemonDetailModel {
       final baseStat = entry?['base_stat'] as int?;
       if (statName != null && baseStat != null) statsMap[statName] = baseStat;
     }
+    final List<String> abilitiesList = <String>[];
+    for (final dynamic a in (json['abilities'] as List<dynamic>? ?? [])) {
+      final Map<String, dynamic>? slot = a as Map<String, dynamic>?;
+      final String? abilityName = slot?['ability']?['name'] as String?;
+      if (abilityName != null) abilitiesList.add(abilityName);
+    }
     return PokemonDetailModel(
       id: json['id'] as int? ?? 0,
       name: json['name'] as String? ?? '',
@@ -50,8 +68,32 @@ class PokemonDetailModel {
       weight: json['weight'] as int? ?? 0,
       types: typesList,
       stats: statsMap,
+      abilities: abilitiesList,
     );
   }
+
+  PokemonDetailModel copyWith({
+    String? category,
+    List<String>? abilities,
+    Map<String, List<String>>? abilityNamesByLocale,
+    double? maleRatio,
+    double? femaleRatio,
+    String? description,
+  }) => PokemonDetailModel(
+    id: id,
+    name: name,
+    imageUrl: imageUrl,
+    height: height,
+    weight: weight,
+    types: types,
+    stats: stats,
+    category: category ?? this.category,
+    abilities: abilities ?? this.abilities,
+    abilityNamesByLocale: abilityNamesByLocale ?? this.abilityNamesByLocale,
+    maleRatio: maleRatio ?? this.maleRatio,
+    femaleRatio: femaleRatio ?? this.femaleRatio,
+    description: description ?? this.description,
+  );
 
   PokemonDetail toEntity() => PokemonDetail(
     id: id,
@@ -61,5 +103,11 @@ class PokemonDetailModel {
     weight: weight,
     types: types,
     stats: stats,
+    category: category,
+    abilities: abilities,
+    abilityNamesByLocale: abilityNamesByLocale,
+    maleRatio: maleRatio,
+    femaleRatio: femaleRatio,
+    description: description,
   );
 }

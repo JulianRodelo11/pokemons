@@ -41,7 +41,40 @@ class AppLocalizationsEs extends AppLocalizations {
   String get homeTitle => 'Pokémon';
 
   @override
+  String get homeSearchHint => 'Procurar Pokémon...';
+
+  @override
   String get homeEmptyList => 'No hay Pokémon';
+
+  @override
+  String get navPokedex => 'Pokedex';
+
+  @override
+  String get navRegiones => 'Regiones';
+
+  @override
+  String get regionsComingSoonTitle => '¡Muy pronto disponible!';
+
+  @override
+  String get regionsComingSoonDescription =>
+      'Estamos trabajando para traerte esta sección. Vuelve más adelante para descubrir todas las novedades.';
+
+  @override
+  String get navFavoritos => 'favoritos';
+
+  @override
+  String get favoritesEmpty => 'No tienes favoritos';
+
+  @override
+  String get favoritesEmptyTitle =>
+      'No has marcado ningún Pokémon como favorito';
+
+  @override
+  String get favoritesEmptySubtitle =>
+      'Haz clic en el ícono de corazón de tus Pokémon favoritos y aparecerán aquí.';
+
+  @override
+  String get navPerfil => 'Perfil';
 
   @override
   String homeError(String error) {
@@ -49,9 +82,37 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get homeErrorTitle => 'Algo salió mal...';
+
+  @override
+  String get homeErrorDescription =>
+      'No pudimos cargar la información en este momento. Verifica tu conexión o intenta nuevamente más tarde.';
+
+  @override
+  String get homeErrorRetry => 'Reintentar';
+
+  @override
   String detailHeightWeight(int height, int weight) {
     return 'Altura: $height dm · Peso: $weight hg';
   }
+
+  @override
+  String get detailLabelPeso => 'PESO';
+
+  @override
+  String get detailLabelAltura => 'ALTURA';
+
+  @override
+  String get detailLabelCategoria => 'CATEGORÍA';
+
+  @override
+  String get detailLabelHabilidad => 'HABILIDAD';
+
+  @override
+  String get detailLabelGenero => 'GENERO';
+
+  @override
+  String get detailDebilidades => 'Debilidades';
 
   @override
   String get detailStats => 'Estadísticas';

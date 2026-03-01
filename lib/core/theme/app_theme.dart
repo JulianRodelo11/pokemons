@@ -17,6 +17,7 @@ abstract class AppTheme {
     return ThemeData(
       useMaterial3: true,
       colorScheme: colorScheme,
+      scaffoldBackgroundColor: Colors.white,
       splashFactory: const SweepSplashFactory(),
       appBarTheme: AppBarTheme(
         centerTitle: true,

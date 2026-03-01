@@ -19,6 +19,7 @@ dependencies:
   freezed_annotation: ^3.1.0
   json_annotation: ^4.9.0
   flutter_svg: ^2.0.16
+  flutter_slidable: ^3.1.1
   google_fonts: ^8.0.2
 
 dev_dependencies:
@@ -46,3 +47,4 @@ flutter:
     # Imágenes base (Flutter carga automáticamente 2.0x y 3.0x)
     - assets/images/Omboarding_01.png
     - assets/images/Omboarding_02.png
+    - assets/images/3.0x/

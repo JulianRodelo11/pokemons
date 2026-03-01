@@ -10,7 +10,17 @@
   "onboardingFavoritesTitle": "Register and save your profile, favorite Pokémon, settings, and much more in the app.",
   "onboardingFavoritesSubtitle": "Mark the Pokémon you like most and access them whenever you want.",
   "homeTitle": "Pokémon",
+  "homeSearchHint": "Search Pokémon...",
   "homeEmptyList": "No Pokémon",
+  "navPokedex": "Pokedex",
+  "navRegiones": "Regiones",
+  "regionsComingSoonTitle": "Coming soon!",
+  "regionsComingSoonDescription": "We are working to bring you this section. Check back later to discover all the news.",
+  "navFavoritos": "favoritos",
+  "favoritesEmpty": "No favorites yet",
+  "favoritesEmptyTitle": "You haven't marked any Pokémon as favorite",
+  "favoritesEmptySubtitle": "Tap the heart icon on your favorite Pokémon and they will appear here.",
+  "navPerfil": "Perfil",
   "homeError": "Error: {error}",
   "@homeError": {
     "placeholders": {
@@ -19,6 +29,9 @@
       }
     }
   },
+  "homeErrorTitle": "Something went wrong...",
+  "homeErrorDescription": "We couldn't load the information right now. Check your connection or try again later.",
+  "homeErrorRetry": "Retry",
   "detailHeightWeight": "Height: {height} dm · Weight: {weight} hg",
   "@detailHeightWeight": {
     "placeholders": {
@@ -30,6 +43,12 @@
       }
     }
   },
+  "detailLabelPeso": "WEIGHT",
+  "detailLabelAltura": "HEIGHT",
+  "detailLabelCategoria": "CATEGORY",
+  "detailLabelHabilidad": "ABILITY",
+  "detailLabelGenero": "GENDER",
+  "detailDebilidades": "Weaknesses",
   "detailStats": "Stats",
   "detailError": "Error: {error}",
   "@detailError": {

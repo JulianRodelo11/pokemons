@@ -5,14 +5,13 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import 'package:pokemons/core/constants/app_constants.dart';
 import 'package:pokemons/core/constants/assets_paths.dart';
 import 'package:pokemons/core/navigation/navigation_providers.dart';
 import 'package:pokemons/core/navigation/navigation_service.dart';
-import 'package:pokemons/domain/entities/pokemon.dart';
-import 'package:pokemons/presentation/providers/pokemon_list_provider.dart';
 import 'package:pokemons/presentation/screens/onboarding/onboarding_screen.dart';
 
-/// Pantalla de splash. Carga la lista y al terminar navega a Onboarding con fade.
+/// Pantalla de splash. Espera solo el tiempo mínimo y navega a Onboarding con fade.
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
@@ -23,6 +22,10 @@ class SplashScreen extends ConsumerStatefulWidget {
 class _SplashScreenState extends ConsumerState<SplashScreen>
     with SingleTickerProviderStateMixin {
   static const _minSplashDuration = Duration(milliseconds: 1500);
+  static const _shortSplashDuration = Duration(milliseconds: 400);
+
+  Duration get _splashDuration =>
+      AppConstants.forcePokemonListError ? _shortSplashDuration : _minSplashDuration;
 
   bool _started = false;
   DateTime? _splashStart;
@@ -36,8 +39,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     _ticker = createTicker((elapsed) {
       if (_splashStart == null || !mounted) return;
       final int ms = DateTime.now().difference(_splashStart!).inMilliseconds;
-      // Una rotación completa durante el tiempo que dura la pantalla (mín 1500ms)
-      final progress = (ms / _minSplashDuration.inMilliseconds).clamp(0.0, 1.0);
+      // Una rotación completa durante el tiempo que dura la pantalla
+      final progress = (ms / _splashDuration.inMilliseconds).clamp(0.0, 1.0);
       setState(
         () => _rotationValue = Curves.easeInOutCubic.transform(progress),
       );
@@ -54,11 +57,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   Future<void> _loadAndGoToHome() async {
     if (_started) return;
     _started = true;
-    // Prefetch + espera mínima. Navega cuando ambos terminen.
-    await Future.wait([
-      Future<void>.delayed(_minSplashDuration),
-      ref.read(pokemonListProvider.future).catchError((_) => <Pokemon>[]),
-    ]);
+    await Future<void>.delayed(_splashDuration);
     if (!mounted) return;
     ref
         .read(navigationServiceProvider)

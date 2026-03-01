@@ -1,0 +1,101 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:pokemons/core/theme/app_typography.dart';
+
+/// Barra de búsqueda: input tipo pill y botón circular, fondo blanco y borde gris claro.
+class HomeSearchBar extends StatelessWidget {
+  const HomeSearchBar({
+    super.key,
+    required this.controller,
+    required this.hint,
+  });
+
+  final TextEditingController controller;
+  final String hint;
+
+  static const Color _borderColor = Color(0xFFE0E0E0);
+  static const Color _iconAndHintColor = Color(0xFF9E9E9E);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+            child: Container(
+              height: 48,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(50),
+                border: Border.all(color: _borderColor, width: 1),
+              ),
+              child: Stack(
+                alignment: Alignment.centerLeft,
+                children: <Widget>[
+                  TextField(
+                    controller: controller,
+                    style: const TextStyle(color: Colors.black87),
+                    decoration: InputDecoration(
+                      hintText: hint,
+                      hintStyle: AppTypography.searchHint.copyWith(
+                        color: _iconAndHintColor,
+                      ),
+                      border: InputBorder.none,
+                      filled: true,
+                      fillColor: Colors.transparent,
+                      contentPadding: const EdgeInsets.only(left: 40),
+                      isDense: true,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 14),
+                    child: SvgPicture.asset(
+                      'assets/svg/search.svg',
+                      width: 20,
+                      height: 20,
+                      colorFilter: const ColorFilter.mode(
+                        _iconAndHintColor,
+                        BlendMode.srcIn,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
+          SizedBox(
+            width: 48,
+            height: 48,
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: () {},
+                customBorder: const CircleBorder(),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: _borderColor, width: 1),
+                  ),
+                  alignment: Alignment.center,
+                  child: SvgPicture.asset(
+                    'assets/svg/search.svg',
+                    width: 20,
+                    height: 20,
+                    colorFilter: const ColorFilter.mode(
+                      _iconAndHintColor,
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

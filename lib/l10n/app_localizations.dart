@@ -158,11 +158,71 @@ abstract class AppLocalizations {
   /// **'Pokémon'**
   String get homeTitle;
 
+  /// No description provided for @homeSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search Pokémon...'**
+  String get homeSearchHint;
+
   /// No description provided for @homeEmptyList.
   ///
   /// In en, this message translates to:
   /// **'No Pokémon'**
   String get homeEmptyList;
+
+  /// No description provided for @navPokedex.
+  ///
+  /// In en, this message translates to:
+  /// **'Pokedex'**
+  String get navPokedex;
+
+  /// No description provided for @navRegiones.
+  ///
+  /// In en, this message translates to:
+  /// **'Regiones'**
+  String get navRegiones;
+
+  /// No description provided for @regionsComingSoonTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming soon!'**
+  String get regionsComingSoonTitle;
+
+  /// No description provided for @regionsComingSoonDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'We are working to bring you this section. Check back later to discover all the news.'**
+  String get regionsComingSoonDescription;
+
+  /// No description provided for @navFavoritos.
+  ///
+  /// In en, this message translates to:
+  /// **'favoritos'**
+  String get navFavoritos;
+
+  /// No description provided for @favoritesEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No favorites yet'**
+  String get favoritesEmpty;
+
+  /// No description provided for @favoritesEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You haven\'t marked any Pokémon as favorite'**
+  String get favoritesEmptyTitle;
+
+  /// No description provided for @favoritesEmptySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the heart icon on your favorite Pokémon and they will appear here.'**
+  String get favoritesEmptySubtitle;
+
+  /// No description provided for @navPerfil.
+  ///
+  /// In en, this message translates to:
+  /// **'Perfil'**
+  String get navPerfil;
 
   /// No description provided for @homeError.
   ///
@@ -170,11 +230,65 @@ abstract class AppLocalizations {
   /// **'Error: {error}'**
   String homeError(String error);
 
+  /// No description provided for @homeErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong...'**
+  String get homeErrorTitle;
+
+  /// No description provided for @homeErrorDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t load the information right now. Check your connection or try again later.'**
+  String get homeErrorDescription;
+
+  /// No description provided for @homeErrorRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get homeErrorRetry;
+
   /// No description provided for @detailHeightWeight.
   ///
   /// In en, this message translates to:
   /// **'Height: {height} dm · Weight: {weight} hg'**
   String detailHeightWeight(int height, int weight);
+
+  /// No description provided for @detailLabelPeso.
+  ///
+  /// In en, this message translates to:
+  /// **'WEIGHT'**
+  String get detailLabelPeso;
+
+  /// No description provided for @detailLabelAltura.
+  ///
+  /// In en, this message translates to:
+  /// **'HEIGHT'**
+  String get detailLabelAltura;
+
+  /// No description provided for @detailLabelCategoria.
+  ///
+  /// In en, this message translates to:
+  /// **'CATEGORY'**
+  String get detailLabelCategoria;
+
+  /// No description provided for @detailLabelHabilidad.
+  ///
+  /// In en, this message translates to:
+  /// **'ABILITY'**
+  String get detailLabelHabilidad;
+
+  /// No description provided for @detailLabelGenero.
+  ///
+  /// In en, this message translates to:
+  /// **'GENDER'**
+  String get detailLabelGenero;
+
+  /// No description provided for @detailDebilidades.
+  ///
+  /// In en, this message translates to:
+  /// **'Weaknesses'**
+  String get detailDebilidades;
 
   /// No description provided for @detailStats.
   ///
