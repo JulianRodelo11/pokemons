@@ -23,11 +23,20 @@ class PokemonCard extends ConsumerWidget {
     required this.pokemon,
     required this.listIndex,
     required this.onTap,
+    this.displayNumber,
   });
 
   final Pokemon pokemon;
   final int listIndex;
   final VoidCallback onTap;
+  /// Si se indica, se usa para mostrar N°XXX (p. ej. en favoritos).
+  final int? displayNumber;
+
+  /// Número a mostrar. Si displayNumber o pokemon.id es 0, en la rama [data] se usa detail.id.
+  int get _number =>
+      (displayNumber != null && displayNumber! > 0)
+          ? displayNumber!
+          : (pokemon.id > 0 ? pokemon.id : listIndex + 1);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -53,19 +62,23 @@ class PokemonCard extends ConsumerWidget {
             );
           });
         }
+        final int effectiveId = pokemon.id > 0 ? pokemon.id : detail.id;
         return _buildCard(
           context,
           ref,
           types: detail.types,
           imageUrl: detail.imageUrl.isNotEmpty
               ? detail.imageUrl
-              : PokemonUtils.officialArtworkUrl(pokemon.id),
+              : PokemonUtils.officialArtworkUrl(effectiveId),
           isFavorite: isFavorite,
+          number: (displayNumber != null && displayNumber! > 0)
+              ? displayNumber!
+              : (pokemon.id > 0 ? pokemon.id : detail.id),
         );
       },
       loading: () => _buildCardSkeleton(context),
       error: (Object err, StackTrace? stackTrace) =>
-          _buildCardWithFallback(context, ref, isFavorite),
+          _buildCardWithFallback(context, ref, isFavorite, _number),
     );
   }
 
@@ -75,7 +88,9 @@ class PokemonCard extends ConsumerWidget {
     required List<String> types,
     required String imageUrl,
     required bool isFavorite,
+    int? number,
   }) {
+    final int num = number ?? _number;
     final Color cardColor = PokemonTypeColors.cardBackground(types);
 
     return Material(
@@ -108,9 +123,7 @@ class PokemonCard extends ConsumerWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
                             Text(
-                              PokemonUtils.formatNumber(
-                                pokemon.id > 0 ? pokemon.id : listIndex + 1,
-                              ),
+                              PokemonUtils.formatNumber(num),
                               style: AppTypography.pokemonCardNumber.copyWith(
                                 color: Theme.of(
                                   context,
@@ -345,9 +358,12 @@ class PokemonCard extends ConsumerWidget {
   Widget _buildCardWithFallback(
     BuildContext context,
     WidgetRef ref,
-    bool isFavorite,
-  ) {
-    final imageUrl = PokemonUtils.officialArtworkUrl(pokemon.id);
+    bool isFavorite, [
+    int? number,
+  ]) {
+    final int num = number ?? _number;
+    final int idForImage = pokemon.id > 0 ? pokemon.id : num;
+    final imageUrl = PokemonUtils.officialArtworkUrl(idForImage);
 
     return Material(
       color: Colors.transparent,
@@ -376,9 +392,7 @@ class PokemonCard extends ConsumerWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           Text(
-                            PokemonUtils.formatNumber(
-                              pokemon.id > 0 ? pokemon.id : listIndex + 1,
-                            ),
+                            PokemonUtils.formatNumber(num),
                             style: AppTypography.pokemonCardNumber,
                           ),
                           const SizedBox(height: 4),

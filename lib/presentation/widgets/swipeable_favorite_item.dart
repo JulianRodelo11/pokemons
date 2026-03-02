@@ -16,6 +16,7 @@ class SwipeableFavoriteItem extends StatefulWidget {
     required this.listIndex,
     required this.onTap,
     required this.onDismiss,
+    this.displayNumber,
   });
 
   final double maxWidth;
@@ -23,6 +24,8 @@ class SwipeableFavoriteItem extends StatefulWidget {
   final int listIndex;
   final VoidCallback onTap;
   final VoidCallback onDismiss;
+  /// Número a mostrar (N°XXX) en la carta. En favoritos se pasa [pokemon].id.
+  final int? displayNumber;
 
   @override
   State<SwipeableFavoriteItem> createState() => _SwipeableFavoriteItemState();
@@ -122,6 +125,7 @@ class _SwipeableFavoriteItemState extends State<SwipeableFavoriteItem>
               pokemon: widget.pokemon,
               listIndex: widget.listIndex,
               onTap: widget.onTap,
+              displayNumber: widget.displayNumber,
             ),
           ),
         ),

@@ -51,6 +51,7 @@ class FavoritosPage extends ConsumerWidget {
                     maxWidth: constraints.maxWidth,
                     pokemon: pokemon,
                     listIndex: pokemon.id - 1,
+                    displayNumber: pokemon.id > 0 ? pokemon.id : null,
                     onTap: () => _openDetail(context, pokemon.name, pokemon.id - 1),
                     onDismiss: () => ref
                         .read(favoritesProvider.notifier)
